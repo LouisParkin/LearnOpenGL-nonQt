@@ -7,46 +7,66 @@
 class Tutorial : public Tutorials
 {
 public:
-  explicit Tutorial(int tutorialId, int* argc, char* argv[]);
   virtual ~Tutorial();
 
-    virtual void run() override final;
+  static Tutorial& getInstance(int tutorialId, int* argc, char* argv[])
+  {
+    static Tutorial instance(tutorialId, argc, argv);
+    return instance;
+  }
+  static void run();// override final;
 
-  protected:
-    virtual void createVertexBuffer();
-    virtual void createIndexBuffer();
-    virtual void compileShaders();
-    virtual void AddShader(GLuint ShaderProgram, const char* pShaderText, GLenum ShaderType);
-    virtual void SpecialKeyboardCB(int Key, int x, int y);
+protected:
+  static void initGlut(void (* displayFunc)(void), void (* idleFunc)(void) = nullptr, void (* specialFunc)(int, int, int) = nullptr);
+  static void initGlew();
+  static void setWindowSize(int width = WINDOW_WIDTH, int height = WINDOW_HEIGHT);
+  static void setWindowLocation(int topLeftX = WINDOW_START_X, int topLeftY = WINDOW_START_Y);
+  static int createWindow(int tutorialID);
+
+  static void createVertexBuffer();
+  static void createIndexBuffer();
+  static void compileShaders();
+  static void AddShader(GLuint ShaderProgram, const char* pShaderText, GLenum ShaderType);
+  static void SpecialKeyboardCB(int Key, int x, int y);
 
 private:
-    int _tutorialID;
+  explicit Tutorial(int tutorialId, int* argc, char* argv[]);
 
-  GLuint _VBO, _IBO;
-  GLuint _gWorldLocation;
-  GLuint _gScaleLocation;
-  GLuint _gWVPLocation;
-  PersProjInfo _gPersProjInfo;
-  Camera* _pGameCamera;
-  char pVSFileName[255];
-  char pFSFileName[255];
+  static int _tutorialID;
+  static GLuint _VBO;
+  static GLuint _IBO;
+  static GLuint _gWorldLocation;
+  static GLuint _gScaleLocation;
+  static GLuint _gWVPLocation;
+  static PersProjInfo _gPersProjInfo;
+  static Camera* _pGameCamera;
+  static char pVSFileName[255];
+  static char pFSFileName[255];
+  static int _width;
+  static int _height;
+  static int _startX;
+  static int _startY;
+  static std::set<int> _myWindows;
 
-//  static auto _createVertexBuffer;
-//  void (*)() _createVertexBuffer;
-  std::function<void (void)> _createVertexBuffer;
-  std::function<void (void)> _createIndexBuffer;
-  std::function<void (void)> _compileShaders;
-  std::function<void (void)> _displayFunc;
-  std::function<void (void)> _idleFunc;
-  std::function<void (int, int, int)> _specialFunc;
 
-  std::function<void (void)> makeCreateVertexBufferFunc(GLuint* vertexObjectBuffer);
-  std::function<void (void)> makeCreateIndexBufferFunc(GLuint* indexObjectBuffer);
-  std::function<void (void)> makeCompileShadersFunc();
-  std::function<void (void)> makeDisplayFunc();
-  std::function<void (void)> makeIdleFunc();
-  std::function<void (int, int, int)> makeSpecialFunc();
-//  void (*makeCreateVertexBufferFunc)(GLuint* vertexObjectBuffer);
+  //  static auto _createVertexBuffer;
+  //  void (*)() _createVertexBuffer;
+  static std::function<void (void)> _createVertexBuffer;
+  static std::function<void (void)> _createIndexBuffer;
+  static std::function<void (void)> _compileShaders;
+  static std::function<void (void)> _displayFunc;
+  static std::function<void (void)> _idleFunc;
+  static std::function<void (GLuint, const char*, GLenum)> _addShaderFunc;
+  static std::function<void (int, int, int)> _specialFunc;
+
+  static std::function<void (void)> makeCreateVertexBufferFunc(GLuint& vertexObjectBuffer);
+  static std::function<void (void)> makeCreateIndexBufferFunc(GLuint& indexObjectBuffer);
+  static std::function<void (void)> makeCompileShadersFunc();
+  static std::function<void (void)> makeDisplayFunc();
+  static std::function<void (void)> makeIdleFunc();
+  static std::function<void (GLuint, const char*, GLenum)> makeAddShaderFunc();
+  static std::function<void (int, int, int)> makeSpecialFunc();
+  //  void (*makeCreateVertexBufferFunc)(GLuint* vertexObjectBuffer);
 };
 
 #endif // TUTORIAL_H

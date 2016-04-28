@@ -54,37 +54,37 @@ int main(int argc, char* argv[])
 
     switch (input[0]) {
     case '4' :
-      tut = new Tutorial(4, &argc, argv);
+      tut = &Tutorial::getInstance(4, &argc, argv);
       break;
     case '5' :
-      tut = new Tutorial(5, &argc, argv);
+      tut = &Tutorial::getInstance(5, &argc, argv);
       break;
     case '6' :
-      tut = new Tutorial(6, &argc, argv);
+      tut = &Tutorial::getInstance(6, &argc, argv);
       break;
     case '7' :
-      tut = new Tutorial(7, &argc, argv);
+      tut = &Tutorial::getInstance(7, &argc, argv);
       break;
     case '8' :
-      tut = new Tutorial(8, &argc, argv);
+      tut = &Tutorial::getInstance(8, &argc, argv);
       break;
     case '9' :
-      tut = new Tutorial(9, &argc, argv);
+      tut = &Tutorial::getInstance(9, &argc, argv);
       break;
     case 'a' :
-      tut = new Tutorial(10, &argc, argv);
+      tut = &Tutorial::getInstance(10, &argc, argv);
       break;
     case 'b' :
-      tut = new Tutorial(11, &argc, argv);
+      tut = &Tutorial::getInstance(11, &argc, argv);
       break;
     case 'c' :
-      tut = new Tutorial(12, &argc, argv);
+      tut = &Tutorial::getInstance(12, &argc, argv);
       break;
     case 'd' :
-      tut = new Tutorial(13, &argc, argv);
+      tut = &Tutorial::getInstance(13, &argc, argv);
       break;
     case 'e' :
-      tut = new Tutorial(14, &argc, argv);
+      tut = &Tutorial::getInstance(14, &argc, argv);
       break;
     case '0' :
       return 0;
