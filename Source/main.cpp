@@ -39,6 +39,7 @@ void printMenu()
   cout << "... ( d ) ... Tutorial 13 ..." << endl;
   cout << "... ( e ) ... Tutorial 14 ..." << endl;
   cout << "... ( f ) ... Tutorial 15 ..." << endl;
+  cout << "... ( g ) ... Tutorial 16 ..." << endl;
   cout << "------------------------------------------------------" << endl;
   cout << "... ( 0 ) ... Quit        ..." << endl;
   cout << "------------------------------------------------------" << endl;
@@ -92,6 +93,9 @@ int main(int argc, char* argv[])
     case 'f' :
       tut = &Tutorial::getInstance(15, &argc, argv);
       break;
+    case 'g' :
+      tut = &Tutorial::getInstance(16, &argc, argv);
+      break;
     case '0' :
       return 0;
     default  :
@@ -103,7 +107,11 @@ int main(int argc, char* argv[])
 
     // Exec choice here
     tut->run();
-    break;
+
+    printMenu();
+    cin.getline(input, 2);
+
+//    break;
   }
 
   return 0;

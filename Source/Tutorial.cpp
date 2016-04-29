@@ -21,6 +21,9 @@ int Tutorial::_startY;
 std::set<int> Tutorial::_myWindows;
 int Tutorial::_tutorialID;
 
+GLuint   Tutorial::_gSampler;
+Texture* Tutorial::_pTexture = NULL;
+
 std::function<void (void)> Tutorial::_createVertexBuffer;
 std::function<void (void)> Tutorial::_createIndexBuffer;
 std::function<void (void)> Tutorial::_compileShaders;
@@ -312,6 +315,74 @@ std::function<void (void)> Tutorial::makeCompileShadersFunc()
 
       /// Ensure it succeeded, handle the possible failure.
       assert(_gWVPLocation != 0xFFFFFFFF);
+    };
+  case 16:
+    return [ & ]() {
+      /**
+       * Create a new shader program.
+       */
+      GLuint shaderProgram = glCreateProgram();
+
+
+      /// Make sure the shader program creation succeeded.
+      if (shaderProgram == 0) {
+        fprintf(stderr, "Error creating shader program\n");
+        exit(1);
+      }
+
+      /// Make strings for reading the GLSL source from file.
+      std::string vs, fs;
+
+      /// Read the vertex shader source from file.
+      if (!ReadFile(pVSFileName, vs)) {
+        exit(1);
+      };
+
+      /// Read the fragment shader source from file.
+      if (!ReadFile(pFSFileName, fs)) {
+        exit(1);
+      };
+
+      /// Add the shaders to the shader program.
+      aAddShader(shaderProgram, vs.c_str(), GL_VERTEX_SHADER);
+      aAddShader(shaderProgram, fs.c_str(), GL_FRAGMENT_SHADER);
+
+      GLint Success = 0;
+      GLchar ErrorLog[1024] = { 0 };
+
+      glLinkProgram(shaderProgram); ///< Link the shader program, assuming to the GL Context.
+      glGetProgramiv(shaderProgram, GL_LINK_STATUS, &Success); ///< Get shader link status.
+
+      /// Handle error if linking failed.
+      if (Success == 0) {
+        glGetProgramInfoLog(shaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
+        fprintf(stderr, "Error linking shader program: '%s'\n", ErrorLog);
+        exit(1);
+      }
+
+      /// A shader program that links is not by definition valid, so validate it.
+      glValidateProgram(shaderProgram);
+
+      /// Retrieve the validation status.
+      glGetProgramiv(shaderProgram, GL_VALIDATE_STATUS, &Success);
+
+      /// Handle the error if validation failed.
+      if (!Success) {
+        glGetProgramInfoLog(shaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
+        fprintf(stderr, "Invalid shader program: '%s'\n", ErrorLog);
+        exit(1);
+      }
+
+      /// Assign a program for OpenGL to use.
+      glUseProgram(shaderProgram);
+
+      /// This tutorial is about the use of Uniform shader attributes (matrices) to transform vertices, retrieve and store it.
+      _gWVPLocation = glGetUniformLocation(shaderProgram, "gWVP");
+
+      /// Ensure it succeeded, handle the possible failure.
+      assert(_gWVPLocation != 0xFFFFFFFF);
+      _gSampler = glGetUniformLocation(shaderProgram, "gSampler");
+      assert(_gSampler != 0xFFFFFFFF);
     };
   }
 }
@@ -750,6 +821,42 @@ std::function<void ()> Tutorial::makeDisplayFunc()
       glutSwapBuffers();
       //  QThread::msleep(1);};
     };
+  case 16:
+    return [ & ]() {
+      _pGameCamera->OnRender();
+
+      glClear(GL_COLOR_BUFFER_BIT);
+
+      /// allocate a static variable scale
+      static float scale = 0.0f;
+
+      /// increment scale by 0.001.
+      scale += 0.01f;
+
+      Pipeline pipeLine;
+      pipeLine.Rotate(0.0f, scale, 0.0f);
+      pipeLine.WorldPos(0.0f, 0.0f, 3.0f);
+      pipeLine.SetCamera(*_pGameCamera);
+      pipeLine.SetPerspectiveProj(_gPersProjInfo);
+
+      /// Load the matrix into the shader.
+      glUniformMatrix4fv(_gWVPLocation, 1, GL_TRUE, (const GLfloat*)pipeLine.GetWVPTrans());
+
+      glEnableVertexAttribArray(0);
+      glEnableVertexAttribArray(1);
+      glBindBuffer(GL_ARRAY_BUFFER, _VBO);
+      glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+      glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)12);
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _IBO);
+      _pTexture->Bind(GL_TEXTURE0);
+      glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+
+      glDisableVertexAttribArray(0);
+      glDisableVertexAttribArray(1);
+
+      glutSwapBuffers();
+      //  QThread::msleep(1);};
+    };
   }
 }
 
@@ -772,6 +879,7 @@ std::function<void ()> Tutorial::makeIdleFunc()
   case 13:
   case 14:
   case 15:
+  case 16:
     return makeDisplayFunc();
   }
 }
@@ -795,6 +903,7 @@ std::function<void (GLuint, const char*, GLenum)> Tutorial::makeAddShaderFunc()
   case 13:
   case 14:
   case 15:
+  case 16:
     return [&](GLuint ShaderProgram, const char* pShaderText, GLenum ShaderType) {
       /// Create a new shader object
       GLuint ShaderObj = glCreateShader(ShaderType);
@@ -849,6 +958,7 @@ std::function<void (int, int, int)> Tutorial::makeSpecialFunc()
     return nullptr;
   case 14:
   case 15:
+  case 16:
     return [ & ](int Key, int x, int y) {
       OGLDEV_KEY OgldevKey = GLUTKeyToOGLDEVKey(Key);
       _pGameCamera->OnKeyboard(OgldevKey);
@@ -875,11 +985,12 @@ std::function<void (int, int, int)> Tutorial::makeKeyboardFunc()
   case 13:
   case 14:
   case 15:
+  case 16:
     return [ & ](int Key, int x, int y) {
       switch (Key) {
       case 'q':
         glutLeaveMainLoop();
-          break;
+        break;
       }
     };
   }
@@ -904,6 +1015,7 @@ std::function<void (int, int)> Tutorial::makePassiveMouseFunc()
   case 14:
     return nullptr;
   case 15:
+  case 16:
     return [ & ](int x, int y) {
       _pGameCamera->OnMouse(x, y);
     };
@@ -929,6 +1041,7 @@ std::function<void (void)> Tutorial::makeCreateIndexBufferFunc(GLuint& indexObje
   case 13:
   case 14:
   case 15:
+  case 16:
     return [ & ]() {
       unsigned int Indices[] = { 0, 3, 1,
                                  1, 3, 2,
@@ -1056,6 +1169,34 @@ std::function<void (void)> Tutorial::makeCreateVertexBufferFunc(GLuint& vertexOb
        */
       glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
     };
+  case 16:
+    return [ & ]() {
+      /**
+         * Vector3f is a composite data type that consists of an x, y, and z coordinate.
+         * Vertices is an array of three coordinates.
+         */
+      Vertex Vertices[4] = { Vertex(Vector3f(-1.0f, -1.0f, 0.5773f), Vector2f(0.0f, 0.0f)),
+                             Vertex(Vector3f(0.0f, -1.0f, -1.15475f), Vector2f(0.5f, 0.0f)),
+                             Vertex(Vector3f(1.0f, -1.0f, 0.5773f),  Vector2f(1.0f, 0.0f)),
+                             Vertex(Vector3f(0.0f, 1.0f, 0.0f),      Vector2f(0.5f, 1.0f))
+                           };
+
+      /**
+       * vertexObjectBuffer is a member GLuint that points to the vertex shader buffer (VBO = vertex buffer object)
+       * glGenBuffers makes the space available fort allocating to vertexObjectBuffer
+       */
+      glGenBuffers(1, &vertexObjectBuffer);
+
+      /**
+       * glBindBuffer attaches the buffer (vertexObjectBuffer) as a space to be used for Arrayed buffer storage.
+       */
+      glBindBuffer(GL_ARRAY_BUFFER, vertexObjectBuffer);
+
+      /**
+       * glBufferData presents Vertices as the data location from where vertex data will be obtained.
+       */
+      glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
+    };
   }
 }
 
@@ -1130,6 +1271,10 @@ void Tutorial::initGlut()
     setWindowSize(WINDOW_WIDTH_15, WINDOW_HEIGHT_15);
     _pGameCamera = new Camera(WINDOW_WIDTH_15, WINDOW_HEIGHT_15);
     break;
+  case 16:
+    setWindowSize(WINDOW_WIDTH_16, WINDOW_HEIGHT_16);
+    _pGameCamera = new Camera(WINDOW_WIDTH_16, WINDOW_HEIGHT_16);
+    break;
   default:
     setWindowSize(WINDOW_WIDTH_1_14, WINDOW_HEIGHT_1_14);
     _pGameCamera = new Camera(WINDOW_WIDTH_1_14, WINDOW_HEIGHT_1_14);
@@ -1139,16 +1284,20 @@ void Tutorial::initGlut()
   setWindowLocation();
   createWindow(_tutorialID);
 
-  if (_tutorialID >= 15) {
-    glutGameModeString("1920x1080");
-    glutEnterGameMode();
-  }
 
   glutDisplayFunc(renderFunction);
   glutIdleFunc(idleFunction);
   glutSpecialFunc(specialKeyboardCB);
   glutKeyboardFunc(keyboardCB);
   glutPassiveMotionFunc(passiveMouseCB);
+
+  if (_tutorialID == 15) {
+    glutGameModeString("1920x1080@24");
+    glutEnterGameMode();
+  }
+  else if (_tutorialID == 16) {
+    glutGameModeString("1280x1024@24");
+  }
 }
 
 void Tutorial::run()
@@ -1157,6 +1306,12 @@ void Tutorial::run()
   initGlew();
 
   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+  if (_tutorialID == 16) {
+    glFrontFace(GL_CW);
+    glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
+  }
 
   char* version = (char*)glGetString(GL_VERSION);
   fprintf(stdout, "Version: '%s'\n", version);
@@ -1175,6 +1330,16 @@ void Tutorial::run()
   /// Read shaders from file, compile, verify and add to shader program.
   ///
   compileShaders();
+
+  if (_tutorialID == 16) {
+    glUniform1i(_gSampler, 0);
+
+    _pTexture = new Texture(GL_TEXTURE_2D, "../Content/test.png");
+
+    if (!_pTexture->Load()) {
+      exit(1);
+    }
+  }
 
   ///
   /// Setup the perspective projection information.

@@ -8,7 +8,8 @@ QMAKE_CXXFLAGS += -std=c++0x
 INCLUDEPATH += $$PWD/../../Source \
                $$PWD/../../Include \
                $$PWD/../../Include/assimp \
-               $$PWD/../../Include/ATB
+               $$PWD/../../Include/ATB \
+               $$PWD/../../Include/ImageMagick-6
 
 INCLUDEPATH += $$PWD/../../Lib
 
@@ -23,8 +24,9 @@ SOURCES += $$PWD/../../Source/main.cpp\
            $$PWD/../../Common/ogldev_backend.cpp \
            $$PWD/../../Common/glut_backend.cpp \
            $$PWD/../../Common/ogldev_glfw_backend.cpp \
+           $$PWD/../../Common/ogldev_texture.cpp \
            $$PWD/../../Source/Tutorials.cpp \
-    ../../Source/Tutorial.cpp
+           $$PWD/../../Source/Tutorial.cpp
 
 HEADERS  += \
     ../../Source/Tutorials.h \
@@ -32,7 +34,7 @@ HEADERS  += \
 
 LIBS += -L$$PWD/../../Lib
 
-LIBS += -lGL -lglut -lGLEW -lAntTweakBar -lglfw -lcurses
+LIBS += -lGL -lglut -lGLEW -lAntTweakBar -lglfw -lcurses -lMagickCore -lMagickWand -lMagick++
 
 include(deployment.pri)
 qtcAddDeployment()

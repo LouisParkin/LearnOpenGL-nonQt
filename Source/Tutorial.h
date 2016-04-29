@@ -52,6 +52,8 @@ private:
   static int _startX;
   static int _startY;
   static std::set<int> _myWindows;
+  static GLuint _gSampler;
+  static Texture* _pTexture;
 
 
   //  static auto _createVertexBuffer;
