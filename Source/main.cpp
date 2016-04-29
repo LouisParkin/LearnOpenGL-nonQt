@@ -27,17 +27,20 @@ void printMenu()
   ClearScreen();
   cout << "Please Make A Selection" << endl;
   cout << "------------------------------------------------------" << endl;
-  cout << "... (4 ) ... Tutorial 4  ..." << endl;
-  cout << "... (5 ) ... Tutorial 5  ..." << endl;
-  cout << "... (6 ) ... Tutorial 6  ..." << endl;
-  cout << "... (7 ) ... Tutorial 7  ..." << endl;
-  cout << "... (8 ) ... Tutorial 8  ..." << endl;
-  cout << "... (9 ) ... Tutorial 9  ..." << endl;
-  cout << "... (a ) ... Tutorial 10 ..." << endl;
-  cout << "... (b ) ... Tutorial 11 ..." << endl;
-  cout << "... (c ) ... Tutorial 12 ..." << endl;
-  cout << "... (d ) ... Tutorial 13 ..." << endl;
-  cout << "... (e ) ... Tutorial 14 ..." << endl;
+  cout << "... ( 4 ) ... Tutorial 4  ..." << endl;
+  cout << "... ( 5 ) ... Tutorial 5  ..." << endl;
+  cout << "... ( 6 ) ... Tutorial 6  ..." << endl;
+  cout << "... ( 7 ) ... Tutorial 7  ..." << endl;
+  cout << "... ( 8 ) ... Tutorial 8  ..." << endl;
+  cout << "... ( 9 ) ... Tutorial 9  ..." << endl;
+  cout << "... ( a ) ... Tutorial 10 ..." << endl;
+  cout << "... ( b ) ... Tutorial 11 ..." << endl;
+  cout << "... ( c ) ... Tutorial 12 ..." << endl;
+  cout << "... ( d ) ... Tutorial 13 ..." << endl;
+  cout << "... ( e ) ... Tutorial 14 ..." << endl;
+  cout << "... ( f ) ... Tutorial 15 ..." << endl;
+  cout << "------------------------------------------------------" << endl;
+  cout << "... ( 0 ) ... Quit        ..." << endl;
   cout << "------------------------------------------------------" << endl;
 }
 
@@ -48,7 +51,7 @@ int main(int argc, char* argv[])
   printMenu();
 
   char input[10];
-  cin.getline(input,2);
+  cin.getline(input, 2);
 
   while (1) {
 
@@ -86,11 +89,14 @@ int main(int argc, char* argv[])
     case 'e' :
       tut = &Tutorial::getInstance(14, &argc, argv);
       break;
+    case 'f' :
+      tut = &Tutorial::getInstance(15, &argc, argv);
+      break;
     case '0' :
       return 0;
     default  :
       cout << "Not a valid choice.  Try again." << endl;
-      cin.getline(input,2);
+      cin.getline(input, 2);
 
       continue;
     }

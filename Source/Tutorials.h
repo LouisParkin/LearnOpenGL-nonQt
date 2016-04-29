@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <GL/freeglut.h>
+//#include <GL/glut.h>
 
 #include "ogldev_util.h"
 #include "ogldev_pipeline.h"
@@ -18,8 +19,10 @@ class Tutorials
 {
 public:
   enum GlobalDefaults {
-    WINDOW_WIDTH = 1024,
-    WINDOW_HEIGHT = 768,
+    WINDOW_WIDTH_1_14 = 1024,
+    WINDOW_HEIGHT_1_14 = 768,
+    WINDOW_WIDTH_15 = 1920,
+    WINDOW_HEIGHT_15 = 1080,
     WINDOW_START_X = 100,
     WINDOW_START_Y = 100
   };
