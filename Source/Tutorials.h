@@ -4,15 +4,14 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <GL/freeglut.h>
-//#include <GL/glut.h>
+
 
 #include "ogldev_util.h"
 #include "ogldev_pipeline.h"
-#include "ogldev_math_3d.h"
-
-#include "ogldev_glut_backend.h"
 #include "ogldev_camera.h"
 #include "ogldev_texture.h"
+#include "lighting_technique.h"
+#include "ogldev_glut_backend.h"
 
 #include <set>
 
@@ -22,27 +21,32 @@ public:
   enum GlobalDefaults {
     WINDOW_WIDTH_1_14 = 1024,
     WINDOW_HEIGHT_1_14 = 768,
-    WINDOW_WIDTH_15 = 1920,
-    WINDOW_HEIGHT_15 = 1080,
+    WINDOW_WIDTH_15_17 = 1920,
+    WINDOW_HEIGHT_15_17 = 1080,
     WINDOW_WIDTH_16 = 1280,
     WINDOW_HEIGHT_16 = 1024,
     WINDOW_START_X = 100,
     WINDOW_START_Y = 100
   };
 
-  struct Vertex
-  {
-      Vector3f m_pos;
-      Vector2f m_tex;
+#ifdef __TUT_VERSION
+#if __TUT_VERSION <= 16
 
-      Vertex() {}
+  struct Vertex {
+    Vector3f m_pos;
+    Vector2f m_tex;
 
-      Vertex(Vector3f pos, Vector2f tex)
-      {
-          m_pos = pos;
-          m_tex = tex;
-      }
+    Vertex() {}
+
+    Vertex(Vector3f pos, Vector2f tex)
+    {
+      m_pos = pos;
+      m_tex = tex;
+    }
   };
+
+#endif
+#endif
 
   explicit Tutorials(int* argc, char* argv[]);
   virtual ~Tutorials();

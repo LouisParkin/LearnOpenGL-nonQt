@@ -12,9 +12,17 @@ public:
   static Tutorial& getInstance(int tutorialId, int* argc, char* argv[])
   {
     static Tutorial instance(tutorialId, argc, argv);
+
+
+
+#if __TUT_VERSION == 17
+
+    _tutorial = new Tutorial17();
+
+#endif
     return instance;
   }
-  static void run();// override final;
+  static void Run();// override final;
 
 protected:
   static void initGlut();
@@ -54,6 +62,16 @@ private:
   static std::set<int> _myWindows;
   static GLuint _gSampler;
   static Texture* _pTexture;
+
+#ifdef __TUT_VERSION
+
+#if __TUT_VERSION == 17
+
+  static Tutorial17* _tutorial;
+
+#endif
+
+#endif
 
 
   //  static auto _createVertexBuffer;

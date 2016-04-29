@@ -5,17 +5,35 @@ CONFIG -= qt
 
 QMAKE_CXXFLAGS += -std=c++0x
 
-INCLUDEPATH += $$PWD/../../Source \
-               $$PWD/../../Include \
-               $$PWD/../../Include/assimp \
-               $$PWD/../../Include/ATB \
-               $$PWD/../../Include/ImageMagick-6
+TUT_VERSION = 17
+TUT_DEFINE  = __TUT_VERSION=$$TUT_VERSION
+DEFINES += $$TUT_DEFINE
 
-INCLUDEPATH += $$PWD/../../Lib
+message(TUT_VERSION = $$TUT_VERSION)
+message(TUT_DEFINE  = $$TUT_DEFINE )
 
-DEPENDPATH += $$PWD/../../Lib
+INCLUDEPATH += \
+           $$PWD/../../Source \
+           $$PWD/../../Include \
+           $$PWD/../../Include/assimp \
+           $$PWD/../../Include/ATB \
+           $$PWD/../../Common/FreetypeGL \
+           $$PWD/../../Include/ImageMagick-6
 
-SOURCES += $$PWD/../../Source/main.cpp\
+INCLUDEPATH += \
+           $$PWD/../../Lib
+
+DEPENDPATH += \
+           $$PWD/../../Lib
+
+SOURCES += \
+           $$PWD/../../Common/FreetypeGL/font-manager.c \
+           $$PWD/../../Common/FreetypeGL/texture-atlas.c \
+           $$PWD/../../Common/FreetypeGL/vector.c \
+           $$PWD/../../Common/FreetypeGL/texture-font.c \
+           $$PWD/../../Common/FreetypeGL/texture-glyph.c \
+           $$PWD/../../Common/FreetypeGL/vertex-buffer.c \
+           $$PWD/../../Source/main.cpp\
            $$PWD/../../Common/ogldev_util.cpp \
            $$PWD/../../Common/math_3d.cpp \
            $$PWD/../../Common/pipeline.cpp \
@@ -25,16 +43,33 @@ SOURCES += $$PWD/../../Source/main.cpp\
            $$PWD/../../Common/glut_backend.cpp \
            $$PWD/../../Common/ogldev_glfw_backend.cpp \
            $$PWD/../../Common/ogldev_texture.cpp \
+           $$PWD/../../Common/ogldev_app.cpp \
+           $$PWD/../../Common/ogldev_basic_lighting.cpp \
+           $$PWD/../../Common/technique.cpp \
+           $$PWD/../../Common/FreetypeGL/freetypeGL.cpp \
+           $$PWD/../../Common/FreetypeGL/font_shader.cpp \
            $$PWD/../../Source/Tutorials.cpp \
-           $$PWD/../../Source/Tutorial.cpp
+           $$PWD/../../Source/Tutorial.cpp \
+           $$PWD/../../Source/Tutorial17/Tutorial17.cpp
+
+
+message(Building for Tutorials 4-14 and $$TUT_VERSION)
+
+greaterThan(TUT_VERSION,16) {
+message(adding version specific source file: Tutorial$$TUT_VERSION/lighting_technique.cpp)
+    SOURCES += $$PWD/../../Source/Tutorial$$TUT_VERSION/lighting_technique.cpp
+}
 
 HEADERS  += \
-    ../../Source/Tutorials.h \
-    ../../Source/Tutorial.h
+           $$PWD/../../Source/Tutorials.h \
+           $$PWD/../../Source/Tutorial.h \
+           $$PWD/../../Source/lighting_technique.h \
+           $$PWD/../../Common/ogldev_app.cpp \
+           $$PWD/../../Source/Tutorial17/Tutorial17.h
 
-LIBS += -L$$PWD/../../Lib
+LIBS +=  -L$$PWD/../../Lib
 
-LIBS += -lGL -lglut -lGLEW -lAntTweakBar -lglfw -lcurses -lMagickCore -lMagickWand -lMagick++
+LIBS += -lGL -lglut -lGLEW -lAntTweakBar -lglfw -lcurses -lMagickCore -lMagickWand -lMagick++ -lfontconfig -lfreetype
 
 include(deployment.pri)
 qtcAddDeployment()

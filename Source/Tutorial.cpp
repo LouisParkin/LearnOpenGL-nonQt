@@ -24,6 +24,16 @@ int Tutorial::_tutorialID;
 GLuint   Tutorial::_gSampler;
 Texture* Tutorial::_pTexture = NULL;
 
+#ifdef __TUT_VERSION
+
+#if __TUT_VERSION == 17
+
+  Tutorial17* Tutorial::_tutorial;
+
+#endif
+
+#endif
+
 std::function<void (void)> Tutorial::_createVertexBuffer;
 std::function<void (void)> Tutorial::_createIndexBuffer;
 std::function<void (void)> Tutorial::_compileShaders;
@@ -38,8 +48,17 @@ std::function<void (int, int)>                    Tutorial::_passiveMouseFunc;
 Tutorial::Tutorial(int tutorialId, int* argc, char* argv[]) : Tutorials(argc, argv)
 {
   _tutorialID = tutorialId;
-  sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shader.vs", _tutorialID);
-  sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shader.fs", _tutorialID);
+  if(_tutorialID <= 16)
+  {
+    sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shader.vs", _tutorialID);
+    sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shader.fs", _tutorialID);
+  }
+  else if (_tutorialID == 17)
+  {
+    sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.vs", _tutorialID);
+    sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.fs", _tutorialID);
+  }
+
 
 //  sprintf(pVSFileName, "/home/louis/Projects/LearnOpenGL-nonQt/Shaders/Tutorial%d/shader.vs", _tutorialID);
 //  sprintf(pFSFileName, "/home/louis/Projects/LearnOpenGL-nonQt/Shaders/Tutorial%d/shader.fs", _tutorialID);
@@ -1268,8 +1287,9 @@ void Tutorial::initGlut()
     _pGameCamera = new Camera(WINDOW_WIDTH_1_14, WINDOW_HEIGHT_1_14);
     break;
   case 15:
-    setWindowSize(WINDOW_WIDTH_15, WINDOW_HEIGHT_15);
-    _pGameCamera = new Camera(WINDOW_WIDTH_15, WINDOW_HEIGHT_15);
+  case 17:
+    setWindowSize(WINDOW_WIDTH_15_17, WINDOW_HEIGHT_15_17);
+    _pGameCamera = new Camera(WINDOW_WIDTH_15_17, WINDOW_HEIGHT_15_17);
     break;
   case 16:
     setWindowSize(WINDOW_WIDTH_16, WINDOW_HEIGHT_16);
@@ -1291,7 +1311,7 @@ void Tutorial::initGlut()
   glutKeyboardFunc(keyboardCB);
   glutPassiveMotionFunc(passiveMouseCB);
 
-  if (_tutorialID == 15) {
+  if (_tutorialID == 15 || _tutorialID == 17) {
     glutGameModeString("1920x1080@24");
     glutEnterGameMode();
   }
@@ -1300,8 +1320,22 @@ void Tutorial::initGlut()
   }
 }
 
-void Tutorial::run()
+void Tutorial::Run()
 {
+#ifdef __TUT_VERSION
+
+#if __TUT_VERSION == 17
+  if(_tutorialID == 17)
+  {
+    _tutorial->Run();
+    return;
+  }
+#endif
+//return;
+#endif
+
+
+
   initGlut();
   initGlew();
 

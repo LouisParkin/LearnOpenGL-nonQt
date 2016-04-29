@@ -1,6 +1,6 @@
 /*
 
-	Copyright 2014 Etay Meiri
+	Copyright 2011 Etay Meiri
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,35 +16,33 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef OGLDEV_APP_H
-#define OGLDEV_APP_H
+#ifndef LIGHTING_TECHNIQUE_H
+#define	LIGHTING_TECHNIQUE_H
 
-#ifndef WIN32
-#include "freetypeGL.h"
-#endif
+#include "technique.h"
+#include "ogldev_math_3d.h"
+#include "ogldev_lights_common.h"
 
 
-class OgldevApp
+class LightingTechnique : public Technique
 {
-protected:
-	OgldevApp();
+public:
 
-	void CalcFPS();
+    LightingTechnique();
 
-	void RenderFPS();
+    virtual bool Init();
 
-	float GetRunningTime();
+    void SetWVP(const Matrix4f& WVP);
+    void SetTextureUnit(unsigned int TextureUnit);
+    void SetDirectionalLight(const DirectionalLight& Light);
 
-protected:
-#ifndef WIN32
-  FontRenderer m_fontRenderer;
-#endif
 private:
-	long long m_frameTime;
-	long long m_startTime;
-	int m_frameCount;
-        int m_fps;
+
+    GLuint m_WVPLocation;
+    GLuint m_samplerLocation;
+    GLuint m_dirLightColorLocation;
+    GLuint m_dirLightAmbientIntensityLocation;
 };
 
 
-#endif
+#endif	/* LIGHTING_TECHNIQUE_H */

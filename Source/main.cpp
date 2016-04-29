@@ -40,6 +40,11 @@ void printMenu()
   cout << "... ( e ) ... Tutorial 14 ..." << endl;
   cout << "... ( f ) ... Tutorial 15 ..." << endl;
   cout << "... ( g ) ... Tutorial 16 ..." << endl;
+#ifdef __TUT_VERSION
+#if __TUT_VERSION >= 17
+  cout << "... ( h ) ... Tutorial " << __TUT_VERSION << " ..." << endl;
+#endif
+#endif
   cout << "------------------------------------------------------" << endl;
   cout << "... ( 0 ) ... Quit        ..." << endl;
   cout << "------------------------------------------------------" << endl;
@@ -96,6 +101,15 @@ int main(int argc, char* argv[])
     case 'g' :
       tut = &Tutorial::getInstance(16, &argc, argv);
       break;
+
+#ifdef __TUT_VERSION
+#if __TUT_VERSION >= 17
+    case 'h' :
+      tut = &Tutorial::getInstance(__TUT_VERSION, &argc, argv);
+      break;
+#endif
+#endif
+
     case '0' :
       return 0;
     default  :
@@ -106,7 +120,7 @@ int main(int argc, char* argv[])
     }
 
     // Exec choice here
-    tut->run();
+    tut->Run();
 
     printMenu();
     cin.getline(input, 2);
