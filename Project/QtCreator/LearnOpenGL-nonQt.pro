@@ -5,7 +5,7 @@ CONFIG -= qt
 
 QMAKE_CXXFLAGS += -std=c++0x
 
-TUT_VERSION = 17
+TUT_VERSION = 18
 TUT_DEFINE  = __TUT_VERSION=$$TUT_VERSION
 DEFINES += $$TUT_DEFINE
 
@@ -50,14 +50,17 @@ SOURCES += \
            $$PWD/../../Common/FreetypeGL/font_shader.cpp \
            $$PWD/../../Source/Tutorials.cpp \
            $$PWD/../../Source/Tutorial.cpp \
-           $$PWD/../../Source/Tutorial17/Tutorial17.cpp
+           $$PWD/../../Source/lighting_technique.cpp
+#           $$PWD/../../Source/Tutorial17/Tutorial17.cpp \
+#           $$PWD/../../Source/Tutorial18/Tutorial18.cpp
 
 
 message(Building for Tutorials 4-14 and $$TUT_VERSION)
 
 greaterThan(TUT_VERSION,16) {
-message(adding version specific source file: Tutorial$$TUT_VERSION/lighting_technique.cpp)
-    SOURCES += $$PWD/../../Source/Tutorial$$TUT_VERSION/lighting_technique.cpp
+FILE_EXT = ".cpp"
+message(adding version specific source file: Tutorial$$TUT_VERSION/Tutorial$$TUT_VERSION$$FILE_EXT)
+    SOURCES += $$PWD/../../Source/Tutorial$$TUT_VERSION/Tutorial$$TUT_VERSION$$FILE_EXT
 }
 
 HEADERS  += \
@@ -65,7 +68,8 @@ HEADERS  += \
            $$PWD/../../Source/Tutorial.h \
            $$PWD/../../Source/lighting_technique.h \
            $$PWD/../../Common/ogldev_app.cpp \
-           $$PWD/../../Source/Tutorial17/Tutorial17.h
+           $$PWD/../../Source/Tutorial17/Tutorial17.h \
+           $$PWD/../../Source/Tutorial18/Tutorial18.h
 
 LIBS +=  -L$$PWD/../../Lib
 

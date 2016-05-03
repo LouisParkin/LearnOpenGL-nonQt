@@ -13,6 +13,15 @@
 #include "lighting_technique.h"
 #include "ogldev_glut_backend.h"
 
+#if __TUT_VERSION == 17
+#include "Tutorial17/Tutorial17.h"
+#include "ogldev_lights_common.h"
+#elif __TUT_VERSION == 18
+#include "Tutorial18/Tutorial18.h"
+#elif __TUT_VERSION == 19
+#include "Tutorial19/Tutorial19.h"
+#endif
+
 #include <set>
 
 class Tutorials

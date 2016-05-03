@@ -1,5 +1,8 @@
 #include "Tutorial17.h"
 
+#ifdef __TUT_VERSION
+#if __TUT_VERSION == 17
+
 bool Tutorial17::Init(char* pVSFileName, char* pFSFileName)
 {
   m_pGameCamera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -105,9 +108,13 @@ void Tutorial17::CreateIndexBuffer()
   unsigned int Indices[] = { 0, 3, 1,
                              1, 3, 2,
                              2, 3, 0,
-                             1, 2, 0 };
+                             1, 2, 0
+                           };
 
   glGenBuffers(1, &m_IBO);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW);
 }
+
+#endif
+#endif
