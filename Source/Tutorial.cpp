@@ -1101,10 +1101,8 @@ std::function<void (void)> Tutorial::makeCreateIndexBufferFunc(GLuint& indexObje
 }
 
 std::function<void (void)> Tutorial::makeCreateVertexBufferFunc(GLuint& vertexObjectBuffer)
-//auto Tutorial::makeCreateVertexBufferFunc(GLuint* vertexObjectBuffer) -> decltype( void(*)() )
+
 {
-//#ifdef __TUT_VERSION
-//#if __TUT_VERSION <= 16
   switch (_tutorialID) {
   case 1:
   case 2:
@@ -1242,8 +1240,6 @@ std::function<void (void)> Tutorial::makeCreateVertexBufferFunc(GLuint& vertexOb
       glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
     };
   }
-//#endif
-//#endif
 }
 
 void Tutorial::initGlew()

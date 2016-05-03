@@ -93,16 +93,16 @@ public:
 
 #if __TUT_VERSION >= 18 && __TUT_VERSION <= 20 // #4
   void SetWorldMatrix(const Matrix4f& WVP);
-  void SetEyeWorldPos(const Vector3f& EyeWorldPos);
-  void SetMatSpecularIntensity(float Intensity);
-  void SetMatSpecularPower(float Power);
 #endif // #4
 
   void SetTextureUnit(unsigned int TextureUnit);
   void SetDirectionalLight(const DirectionalLight& Light);
 
-#if __TUT_VERSION == 20 // #5
+#if __TUT_VERSION >= 19 && __TUT_VERSION <= 20 // #5
   void SetPointLights(unsigned int NumLights, const PointLight* pLights);
+  void SetMatSpecularIntensity(float Intensity);
+  void SetMatSpecularPower(float Power);
+  void SetEyeWorldPos(const Vector3f& EyeWorldPos);
 #endif // #5
 
 private:
