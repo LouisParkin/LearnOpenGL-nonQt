@@ -24,7 +24,7 @@
 
 #if __TUT_VERSION == 17
 #include "ogldev_lights_common.h"
-#elif __TUT_VERSION == 18
+#elif __TUT_VERSION >= 18  && __TUT_VERSION <= 19
 struct DirectionalLight {
   Vector3f Color;
   float AmbientIntensity;
@@ -46,24 +46,38 @@ public:
 
   void SetWVP(const Matrix4f& WVP);
 
-#if __TUT_VERSION == 18
+#if __TUT_VERSION >= 18 && __TUT_VERSION <= 19
   void SetWorldMatrix(const Matrix4f& WVP);
 #endif
 
   void SetTextureUnit(unsigned int TextureUnit);
   void SetDirectionalLight(const DirectionalLight& Light);
 
+#if __TUT_VERSION >= 19
+  void SetEyeWorldPos(const Vector3f& EyeWorldPos);
+  void SetMatSpecularIntensity(float Intensity);
+  void SetMatSpecularPower(float Power);
+#endif
+
 private:
 
   GLuint m_WVPLocation;
-#if __TUT_VERSION == 18
+#if __TUT_VERSION >= 18 && __TUT_VERSION <= 19
   GLuint m_WorldMatrixLocation;
 #endif
+
   GLuint m_samplerLocation;
+
+#if __TUT_VERSION >= 19
+  GLuint m_eyeWorldPosLocation;
+  GLuint m_matSpecularIntensityLocation;
+  GLuint m_matSpecularPowerLocation;
+#endif
+
 #if __TUT_VERSION == 17
   GLuint m_dirLightColorLocation;
   GLuint m_dirLightAmbientIntensityLocation;
-#elif __TUT_VERSION == 18
+#elif __TUT_VERSION >= 18  && __TUT_VERSION <= 19
   struct {
     GLuint Color;
     GLuint AmbientIntensity;

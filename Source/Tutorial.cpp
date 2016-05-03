@@ -34,6 +34,10 @@ Texture* Tutorial::_pTexture = NULL;
 
     Tutorial18* Tutorial::_tutorial;
 
+  #elif __TUT_VERSION == 19
+
+    Tutorial19* Tutorial::_tutorial;
+
   #endif
 
 #endif
@@ -1311,6 +1315,7 @@ void Tutorial::initGlut()
     break;
   case 17:
   case 18:
+  case 19:
     return;
   default:
     setWindowSize(WINDOW_WIDTH_1_14, WINDOW_HEIGHT_1_14);
@@ -1354,6 +1359,8 @@ void Tutorial::Run()
     _tutorial = new Tutorial17();
 #elif __TUT_VERSION == 18
     _tutorial = new Tutorial18();
+#elif __TUT_VERSION == 19
+    _tutorial = new Tutorial19();
 #endif
 
     if (!_tutorial->Init(pVSFileName, pFSFileName)) {

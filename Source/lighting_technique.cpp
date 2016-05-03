@@ -44,11 +44,15 @@ bool LightingTechnique::Init(char* pVSFileName, char* pFSFileName)
   m_WVPLocation = GetUniformLocation("gWVP");
 
 
-#if __TUT_VERSION == 18
+#if __TUT_VERSION >= 18  && __TUT_VERSION <= 19
   m_WorldMatrixLocation = GetUniformLocation("gWorld");
 #endif
 
   m_samplerLocation = GetUniformLocation("gSampler");
+
+#if __TUT_VERSION >= 19
+  m_eyeWorldPosLocation = GetUniformLocation("gEyeWorldPos");
+#endif
 
 #if __TUT_VERSION == 17
   m_dirLightColorLocation = GetUniformLocation("gDirectionalLight.Color");
@@ -64,16 +68,28 @@ bool LightingTechnique::Init(char* pVSFileName, char* pFSFileName)
   return true;
 #endif
 
-#if __TUT_VERSION == 18
+#if __TUT_VERSION >= 18  && __TUT_VERSION <= 19
   m_dirLightLocation.Color = GetUniformLocation("gDirectionalLight.Color");
   m_dirLightLocation.AmbientIntensity = GetUniformLocation("gDirectionalLight.AmbientIntensity");
   m_dirLightLocation.Direction = GetUniformLocation("gDirectionalLight.Direction");
   m_dirLightLocation.DiffuseIntensity = GetUniformLocation("gDirectionalLight.DiffuseIntensity");
 
+#if __TUT_VERSION >= 19
+  m_matSpecularIntensityLocation = GetUniformLocation("gMatSpecularIntensity");
+  m_matSpecularPowerLocation = GetUniformLocation("gSpecularPower");
+#endif
+
   if (m_dirLightLocation.AmbientIntensity == 0xFFFFFFFF ||
       m_WVPLocation == 0xFFFFFFFF ||
       m_WorldMatrixLocation == 0xFFFFFFFF ||
       m_samplerLocation == 0xFFFFFFFF ||
+
+#if __TUT_VERSION >= 19
+      m_eyeWorldPosLocation == 0xFFFFFFFF ||
+      m_matSpecularIntensityLocation == 0xFFFFFFFF ||
+      m_matSpecularPowerLocation == 0xFFFFFFFF ||
+#endif
+
       m_dirLightLocation.Color == 0xFFFFFFFF ||
       m_dirLightLocation.DiffuseIntensity == 0xFFFFFFFF ||
       m_dirLightLocation.Direction == 0xFFFFFFFF) {
@@ -89,7 +105,7 @@ void LightingTechnique::SetWVP(const Matrix4f& WVP)
   glUniformMatrix4fv(m_WVPLocation, 1, GL_TRUE, (const GLfloat*)WVP.m);
 }
 
-#if __TUT_VERSION == 18
+#if __TUT_VERSION >= 18  && __TUT_VERSION <= 19
 
 void LightingTechnique::SetWorldMatrix(const Matrix4f& WorldInverse)
 {
@@ -110,7 +126,7 @@ void LightingTechnique::SetDirectionalLight(const DirectionalLight& Light)
 #if __TUT_VERSION == 17
   glUniform3f(m_dirLightColorLocation, Light.Color.x, Light.Color.y, Light.Color.z);
   glUniform1f(m_dirLightAmbientIntensityLocation, Light.AmbientIntensity);
-#elif __TUT_VERSION == 18
+#elif __TUT_VERSION >= 18 && __TUT_VERSION <= 19
   glUniform3f(m_dirLightLocation.Color, Light.Color.x, Light.Color.y, Light.Color.z);
   glUniform1f(m_dirLightLocation.AmbientIntensity, Light.AmbientIntensity);
   Vector3f Direction = Light.Direction;
@@ -120,3 +136,23 @@ void LightingTechnique::SetDirectionalLight(const DirectionalLight& Light)
 #endif
 
 }
+
+
+#if __TUT_VERSION >= 19
+
+void LightingTechnique::SetEyeWorldPos(const Vector3f& EyeWorldPos)
+{
+  glUniform3f(m_eyeWorldPosLocation, EyeWorldPos.x, EyeWorldPos.y, EyeWorldPos.z);
+}
+
+void LightingTechnique::SetMatSpecularIntensity(float Intensity)
+{
+  glUniform1f(m_matSpecularIntensityLocation, Intensity);
+}
+
+void LightingTechnique::SetMatSpecularPower(float Power)
+{
+  glUniform1f(m_matSpecularPowerLocation, Power);
+}
+
+#endif
