@@ -5,7 +5,7 @@ CONFIG -= qt
 
 QMAKE_CXXFLAGS += -std=c++0x
 
-TUT_VERSION = 19
+TUT_VERSION = 20
 TUT_DEFINE  = __TUT_VERSION=$$TUT_VERSION
 DEFINES += $$TUT_DEFINE
 
@@ -51,8 +51,6 @@ SOURCES += \
            $$PWD/../../Source/Tutorials.cpp \
            $$PWD/../../Source/Tutorial.cpp \
            $$PWD/../../Source/lighting_technique.cpp
-#           $$PWD/../../Source/Tutorial17/Tutorial17.cpp \
-#           $$PWD/../../Source/Tutorial18/Tutorial18.cpp
 
 
 message(Building for Tutorials 4-14 and $$TUT_VERSION)
@@ -67,9 +65,7 @@ HEADERS  += \
            $$PWD/../../Source/Tutorials.h \
            $$PWD/../../Source/Tutorial.h \
            $$PWD/../../Source/lighting_technique.h \
-           $$PWD/../../Common/ogldev_app.cpp \
-           $$PWD/../../Source/Tutorial17/Tutorial17.h \
-           $$PWD/../../Source/Tutorial18/Tutorial18.h
+           $$PWD/../../Common/ogldev_app.cpp
 
 LIBS +=  -L$$PWD/../../Lib
 

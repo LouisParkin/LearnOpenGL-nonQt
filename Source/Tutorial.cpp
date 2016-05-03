@@ -38,6 +38,10 @@ Texture* Tutorial::_pTexture = NULL;
 
     Tutorial19* Tutorial::_tutorial;
 
+  #elif __TUT_VERSION == 20
+
+    Tutorial20* Tutorial::_tutorial;
+
   #endif
 
 #endif
@@ -1099,6 +1103,8 @@ std::function<void (void)> Tutorial::makeCreateIndexBufferFunc(GLuint& indexObje
 std::function<void (void)> Tutorial::makeCreateVertexBufferFunc(GLuint& vertexObjectBuffer)
 //auto Tutorial::makeCreateVertexBufferFunc(GLuint* vertexObjectBuffer) -> decltype( void(*)() )
 {
+//#ifdef __TUT_VERSION
+//#if __TUT_VERSION <= 16
   switch (_tutorialID) {
   case 1:
   case 2:
@@ -1236,6 +1242,8 @@ std::function<void (void)> Tutorial::makeCreateVertexBufferFunc(GLuint& vertexOb
       glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
     };
   }
+//#endif
+//#endif
 }
 
 void Tutorial::initGlew()
@@ -1316,6 +1324,7 @@ void Tutorial::initGlut()
   case 17:
   case 18:
   case 19:
+  case 20:
     return;
   default:
     setWindowSize(WINDOW_WIDTH_1_14, WINDOW_HEIGHT_1_14);
@@ -1361,6 +1370,8 @@ void Tutorial::Run()
     _tutorial = new Tutorial18();
 #elif __TUT_VERSION == 19
     _tutorial = new Tutorial19();
+#elif __TUT_VERSION == 20
+    _tutorial = new Tutorial20();
 #endif
 
     if (!_tutorial->Init(pVSFileName, pFSFileName)) {

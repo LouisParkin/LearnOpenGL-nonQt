@@ -20,6 +20,8 @@
 #include "Tutorial18/Tutorial18.h"
 #elif __TUT_VERSION == 19
 #include "Tutorial19/Tutorial19.h"
+#elif __TUT_VERSION == 20
+#include "Tutorial20/Tutorial20.h"
 #endif
 
 #include <set>
