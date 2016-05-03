@@ -26,11 +26,14 @@ Texture* Tutorial::_pTexture = NULL;
 
 #ifdef __TUT_VERSION
 
-#if __TUT_VERSION == 17
+  #if __TUT_VERSION == 17
 
-  Tutorial17* Tutorial::_tutorial;
+    Tutorial17* Tutorial::_tutorial;
 
-#endif
+  #elif __TUT_VERSION == 18
+
+    Tutorial18* Tutorial::_tutorial;
+  #endif
 
 #endif
 
@@ -48,20 +51,31 @@ std::function<void (int, int)>                    Tutorial::_passiveMouseFunc;
 Tutorial::Tutorial(int tutorialId, int* argc, char* argv[]) : Tutorials(argc, argv)
 {
   _tutorialID = tutorialId;
-  if(_tutorialID <= 16)
-  {
+  if (_tutorialID <= 16) {
     sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shader.vs", _tutorialID);
     sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shader.fs", _tutorialID);
-  }
-  else if (_tutorialID == 17)
-  {
-    sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.vs", _tutorialID);
-    sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.fs", _tutorialID);
-  }
-
-
 //  sprintf(pVSFileName, "/home/louis/Projects/LearnOpenGL-nonQt/Shaders/Tutorial%d/shader.vs", _tutorialID);
 //  sprintf(pFSFileName, "/home/louis/Projects/LearnOpenGL-nonQt/Shaders/Tutorial%d/shader.fs", _tutorialID);
+    glutInit(argc, argv);
+  }
+  else if (_tutorialID >= 17) {
+
+#ifdef __TUT_VERSION
+
+#if __TUT_VERSION >= 17
+    if (_tutorialID >= 17) {
+      GLUTBackendInit(*argc, argv, false, false);
+
+      sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.vs", _tutorialID);
+      sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.fs", _tutorialID);
+//  sprintf(pVSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.vs", _tutorialID);
+//  sprintf(pFSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.fs", _tutorialID);
+      return;
+    }
+#endif
+#endif
+
+  }
 
   _createVertexBuffer = makeCreateVertexBufferFunc(_VBO);
   _createIndexBuffer  = makeCreateIndexBufferFunc(_IBO);
@@ -1287,7 +1301,6 @@ void Tutorial::initGlut()
     _pGameCamera = new Camera(WINDOW_WIDTH_1_14, WINDOW_HEIGHT_1_14);
     break;
   case 15:
-  case 17:
     setWindowSize(WINDOW_WIDTH_15_17, WINDOW_HEIGHT_15_17);
     _pGameCamera = new Camera(WINDOW_WIDTH_15_17, WINDOW_HEIGHT_15_17);
     break;
@@ -1295,6 +1308,9 @@ void Tutorial::initGlut()
     setWindowSize(WINDOW_WIDTH_16, WINDOW_HEIGHT_16);
     _pGameCamera = new Camera(WINDOW_WIDTH_16, WINDOW_HEIGHT_16);
     break;
+  case 17:
+  case 18:
+      return;
   default:
     setWindowSize(WINDOW_WIDTH_1_14, WINDOW_HEIGHT_1_14);
     _pGameCamera = new Camera(WINDOW_WIDTH_1_14, WINDOW_HEIGHT_1_14);
@@ -1322,18 +1338,38 @@ void Tutorial::initGlut()
 
 void Tutorial::Run()
 {
+
 #ifdef __TUT_VERSION
 
+#if __TUT_VERSION >= 17
+  if (_tutorialID >= 17) {
+    char windowName[255];
+    sprintf(&windowName[0], "Tutorial %d", _tutorialID);
+    if (!GLUTBackendCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, false, windowName)) {
+      return;
+    }
+
 #if __TUT_VERSION == 17
-  if(_tutorialID == 17)
-  {
+    _tutorial = new Tutorial17();
+#elif __TUT_VERSION == 18
+    _tutorial = new Tutorial18();
+#endif
+
+    if (!_tutorial->Init(pVSFileName, pFSFileName)) {
+      return;
+    }
+
+    char* version = (char*)glGetString(GL_VERSION);
+    fprintf(stdout, "Version: '%s'\n", version);
+
     _tutorial->Run();
+
+    delete _tutorial;
     return;
   }
 #endif
-//return;
-#endif
 
+#endif
 
 
   initGlut();
@@ -1349,6 +1385,7 @@ void Tutorial::Run()
 
   char* version = (char*)glGetString(GL_VERSION);
   fprintf(stdout, "Version: '%s'\n", version);
+
 
   ///
   /// Create vertex buffer: glGenBuffers, glBindBuffer, glBufferData.
