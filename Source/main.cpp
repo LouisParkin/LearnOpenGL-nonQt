@@ -57,9 +57,9 @@ int main(int argc, char* argv[])
   printMenu();
 
   char input[10];
-  cin.getline(input, 2);
 
   while (1) {
+    cin.getline(input, 2);
 
     switch (input[0]) {
     case '4' :
@@ -122,10 +122,7 @@ int main(int argc, char* argv[])
     // Exec choice here
     tut->Run();
 
-    printMenu();
-    cin.getline(input, 2);
-
-//    break;
+    break;
   }
 
   return 0;

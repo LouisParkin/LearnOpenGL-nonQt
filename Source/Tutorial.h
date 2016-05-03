@@ -12,14 +12,6 @@ public:
   static Tutorial& getInstance(int tutorialId, int* argc, char* argv[])
   {
     static Tutorial instance(tutorialId, argc, argv);
-
-
-
-#if __TUT_VERSION == 17
-
-    _tutorial = new Tutorial17();
-
-#endif
     return instance;
   }
   static void Run();// override final;

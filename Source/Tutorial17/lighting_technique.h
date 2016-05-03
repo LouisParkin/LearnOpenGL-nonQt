@@ -30,7 +30,7 @@ public:
 
     LightingTechnique();
 
-    virtual bool Init();
+    virtual bool Init(char* pVSFileName, char* pFSFileName);
 
     void SetWVP(const Matrix4f& WVP);
     void SetTextureUnit(unsigned int TextureUnit);

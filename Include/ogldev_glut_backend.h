@@ -33,6 +33,18 @@ void GLUTBackendSwapBuffers();
 
 void GLUTBackendLeaveMainLoop();
 
+//static void IdleCB();
+//static void RenderSceneCB();
+//static void PassiveMouseCB(int x, int y);
+//static void KeyboardCB(unsigned char Key, int x, int y);
+//static void SpecialKeyboardCB(int Key, int x, int y);
+//static OGLDEV_MOUSE GLUTMouseToOGLDEVMouse(uint Button);
+//static void MouseCB(int Button, int State, int x, int y);
+struct Attempt
+{
+  static void InitCallbacks();
+};
+
 OGLDEV_KEY GLUTKeyToOGLDEVKey(uint Key);
 
 #endif	/* GLUT_BACKEND_H */

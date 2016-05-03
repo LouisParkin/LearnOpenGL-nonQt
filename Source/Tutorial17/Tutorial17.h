@@ -18,18 +18,17 @@
 
 #ifdef __TUT_VERSION
 #if __TUT_VERSION == 17
-struct Vertex
-{
-    Vector3f m_pos;
-    Vector2f m_tex;
+struct Vertex {
+  Vector3f m_pos;
+  Vector2f m_tex;
 
-    Vertex() {}
+  Vertex() {}
 
-    Vertex(Vector3f pos, Vector2f tex)
-    {
-        m_pos = pos;
-        m_tex = tex;
-    }
+  Vertex(Vector3f pos, Vector2f tex)
+  {
+    m_pos = pos;
+    m_tex = tex;
+  }
 };
 #endif
 #endif
@@ -53,17 +52,17 @@ public:
     m_persProjInfo.zFar = 100.0f;
   }
 
-  ~Tutorial17()
+  virtual ~Tutorial17()
   {
     delete m_pEffect;
     delete m_pGameCamera;
     delete m_pTexture;
   }
 
-  bool Init();
+  bool Init(char* pVSFileName, char* pFSFileName);
   void Run();
   virtual void RenderSceneCB();
-  virtual void KeyboardCB(OGLDEV_KEY OgldevKey);
+  virtual void KeyboardCB(OGLDEV_KEY OgldevKey, OGLDEV_KEY_STATE OgldevKeyState = OGLDEV_KEY_STATE_PRESS);
   virtual void PassiveMouseCB(int x, int y);
 
 private:

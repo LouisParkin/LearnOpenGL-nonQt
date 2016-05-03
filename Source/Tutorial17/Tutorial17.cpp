@@ -1,6 +1,6 @@
 #include "Tutorial17.h"
 
-bool Tutorial17::Init()
+bool Tutorial17::Init(char* pVSFileName, char* pFSFileName)
 {
   m_pGameCamera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -9,7 +9,7 @@ bool Tutorial17::Init()
 
   m_pEffect = new LightingTechnique();
 
-  if (!m_pEffect->Init()) {
+  if (!m_pEffect->Init(pVSFileName, pFSFileName)) {
     return false;
   }
 
@@ -62,7 +62,7 @@ void Tutorial17::RenderSceneCB()
   glutSwapBuffers();
 }
 
-void Tutorial17::KeyboardCB(OGLDEV_KEY OgldevKey)
+void Tutorial17::KeyboardCB(OGLDEV_KEY OgldevKey, OGLDEV_KEY_STATE OgldevKeyState)
 {
   switch (OgldevKey) {
   case OGLDEV_KEY_ESCAPE:

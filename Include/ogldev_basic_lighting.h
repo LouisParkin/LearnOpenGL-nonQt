@@ -31,7 +31,7 @@ public:
 
     BasicLightingTechnique();
 
-    virtual bool Init();
+    virtual bool Init(char* pVSFileName, char* pFSFileName);
 
     void SetWVP(const Matrix4f& WVP);
     void SetWorldMatrix(const Matrix4f& WVP);
