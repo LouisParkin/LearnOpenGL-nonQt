@@ -16,24 +16,23 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef LIGHTING_TECHNIQUE_H
+#ifndef LIGHTING_TECHNIQUE_H // #1
 #define LIGHTING_TECHNIQUE_H
 
 #include "technique.h"
 #include "ogldev_math_3d.h"
 
-#if __TUT_VERSION == 17
+#if __TUT_VERSION == 17 // #2
 #include "ogldev_lights_common.h"
-#elif __TUT_VERSION == 18
+#elif __TUT_VERSION >= 18  && __TUT_VERSION <= 19 // #2
 struct DirectionalLight {
   Vector3f Color;
   float AmbientIntensity;
   Vector3f Direction;
   float DiffuseIntensity;
 };
-#elif __TUT_VERSION == 19
 
-#endif
+#endif // #2
 
 
 class LightingTechnique : public Technique
@@ -46,9 +45,9 @@ public:
 
   void SetWVP(const Matrix4f& WVP);
 
-#if __TUT_VERSION == 18
+#if __TUT_VERSION >= 18 && __TUT_VERSION <= 20 // #4
   void SetWorldMatrix(const Matrix4f& WVP);
-#endif
+#endif // #4
 
   void SetTextureUnit(unsigned int TextureUnit);
   void SetDirectionalLight(const DirectionalLight& Light);
@@ -56,22 +55,22 @@ public:
 private:
 
   GLuint m_WVPLocation;
-#if __TUT_VERSION == 18
+#if __TUT_VERSION >= 18 && __TUT_VERSION <= 20 // #6
   GLuint m_WorldMatrixLocation;
-#endif
+#endif // #6
   GLuint m_samplerLocation;
 #if __TUT_VERSION == 17
   GLuint m_dirLightColorLocation;
   GLuint m_dirLightAmbientIntensityLocation;
-#elif __TUT_VERSION == 18
+#elif __TUT_VERSION >= 18  && __TUT_VERSION <= 20 // #9
   struct {
     GLuint Color;
     GLuint AmbientIntensity;
     GLuint Direction;
     GLuint DiffuseIntensity;
   } m_dirLightLocation;
-#endif
+#endif // #9
 };
 
 
-#endif  /* LIGHTING_TECHNIQUE_H */
+#endif  /* LIGHTING_TECHNIQUE_H */ // #1
