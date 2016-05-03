@@ -68,9 +68,9 @@ BasicLightingTechnique::BasicLightingTechnique()
 {   
 }
 
-bool BasicLightingTechnique::Init()
+bool BasicLightingTechnique::Init(char* pVSFileName, char* pFSFileName)
 {
-    if (!Technique::Init()) {
+    if (!Technique::Init(pVSFileName, pFSFileName)) {
         return false;
     }
 
