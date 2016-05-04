@@ -60,10 +60,13 @@ private:
 #if __TUT_VERSION == 17
 
   static Tutorial17* _tutorial;
+
 #elif __TUT_VERSION == 18
 
   static Tutorial18* _tutorial;
 
+<<<<<<< HEAD
+=======
 #elif __TUT_VERSION == 19
 
   static Tutorial19* _tutorial;
@@ -72,18 +75,7 @@ private:
 
   static Tutorial20* _tutorial;
 
-#elif __TUT_VERSION == 18
-
-  static Tutorial18* _tutorial;
-
-#elif __TUT_VERSION == 19
-
-  static Tutorial19* _tutorial;
-
-#elif __TUT_VERSION == 20
-
-  static Tutorial20* _tutorial;
-
+>>>>>>> dev
 #endif
 
 #endif
