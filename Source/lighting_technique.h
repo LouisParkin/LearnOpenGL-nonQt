@@ -95,13 +95,14 @@ public:
 
   void SetTextureUnit(unsigned int TextureUnit);
   void SetDirectionalLight(const DirectionalLight& Light);
-#if __TUT_VERSION >= 19 && __TUT_VERSION <= 20 // #5
+#if __TUT_VERSION == 20 // #5
   void SetPointLights(unsigned int NumLights, const PointLight* pLights);
+#endif // #5
+#if __TUT_VERSION >= 19 && __TUT_VERSION <= 20
   void SetMatSpecularIntensity(float Intensity);
   void SetMatSpecularPower(float Power);
   void SetEyeWorldPos(const Vector3f& EyeWorldPos);
-#endif // #5
-
+#endif
 private:
 
   GLuint m_WVPLocation;
