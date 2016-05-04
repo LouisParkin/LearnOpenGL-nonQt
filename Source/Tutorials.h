@@ -24,6 +24,8 @@
 #include "Tutorial20/Tutorial20.h"
 #elif __TUT_VERSION == 21
 #include "Tutorial21/Tutorial21.h"
+#elif __TUT_VERSION == 22
+#include "Tutorial22/Tutorial22.h"
 #endif
 #include <set>
 

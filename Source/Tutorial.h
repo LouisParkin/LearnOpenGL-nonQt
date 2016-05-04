@@ -76,6 +76,10 @@ private:
 
   static Tutorial21* _tutorial;
 
+#elif __TUT_VERSION == 22
+
+  static Tutorial22* _tutorial;
+
 #endif
 
 #endif

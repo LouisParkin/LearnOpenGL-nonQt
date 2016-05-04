@@ -41,9 +41,15 @@ Texture* Tutorial::_pTexture = NULL;
   #elif __TUT_VERSION == 20
 
     Tutorial20* Tutorial::_tutorial;
+
   #elif __TUT_VERSION == 21
 
     Tutorial21* Tutorial::_tutorial;
+
+  #elif __TUT_VERSION == 22
+
+    Tutorial22* Tutorial::_tutorial;
+
   #endif
 
 #endif
@@ -69,24 +75,29 @@ Tutorial::Tutorial(int tutorialId, int* argc, char* argv[]) : Tutorials(argc, ar
 //  sprintf(pFSFileName, "/home/louis/Projects/LearnOpenGL-nonQt/Shaders/Tutorial%d/shader.fs", _tutorialID);
     glutInit(argc, argv);
   }
-  else if (_tutorialID >= 17) {
+  else if (_tutorialID >= 17 && _tutorialID <= 21) {
 
 #ifdef __TUT_VERSION
 
-#if __TUT_VERSION >= 17
-    if (_tutorialID >= 17) {
-      GLUTBackendInit(*argc, argv, false, false);
-      sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.vs", _tutorialID);
-      sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.fs", _tutorialID);
+#if __TUT_VERSION >= 17 && __TUT_VERSION <= 21
+    GLUTBackendInit(*argc, argv, false, false);
+    sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.vs", _tutorialID);
+    sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.fs", _tutorialID);
 //  sprintf(pVSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.vs", _tutorialID);
 //  sprintf(pFSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.fs", _tutorialID);
-      return;
-    }
-#endif
+    return;
 #endif
 
 
   }
+  else if (_tutorialID >= 22) {
+#if __TUT_VERSION >= 22
+    GLUTBackendInit(*argc, argv, false, false);
+
+    return;
+#endif
+  }
+#endif
 
   _createVertexBuffer = makeCreateVertexBufferFunc(_VBO);
   _createIndexBuffer  = makeCreateIndexBufferFunc(_IBO);
@@ -1323,7 +1334,10 @@ void Tutorial::initGlut()
   case 18:
   case 19:
   case 20:
+  case 21:
+  case 22:
     return;
+
   default:
     setWindowSize(WINDOW_WIDTH_1_14, WINDOW_HEIGHT_1_14);
     _pGameCamera = new Camera(WINDOW_WIDTH_1_14, WINDOW_HEIGHT_1_14);
@@ -1370,6 +1384,8 @@ void Tutorial::Run()
     _tutorial = new Tutorial20();
 #elif __TUT_VERSION == 21
     _tutorial = new Tutorial21();
+#elif __TUT_VERSION == 22
+    _tutorial = new Tutorial22();
 #endif
 
     if (!_tutorial->Init(pVSFileName, pFSFileName)) {
