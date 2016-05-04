@@ -57,6 +57,10 @@ int main(int argc, char* argv[])
   printMenu();
 
   char input[10];
+<<<<<<< HEAD
+  
+=======
+>>>>>>> dev
 
   while (1) {
     cin.getline(input, 2);

@@ -51,6 +51,11 @@ SOURCES += \
            $$PWD/../../Source/Tutorials.cpp \
            $$PWD/../../Source/Tutorial.cpp \
            $$PWD/../../Source/lighting_technique.cpp
+<<<<<<< HEAD
+#           $$PWD/../../Source/Tutorial17/Tutorial17.cpp \
+#           $$PWD/../../Source/Tutorial18/Tutorial18.cpp
+=======
+>>>>>>> dev
 
 
 message(Building for Tutorials 4-14 and $$TUT_VERSION)
@@ -65,7 +70,13 @@ HEADERS  += \
            $$PWD/../../Source/Tutorials.h \
            $$PWD/../../Source/Tutorial.h \
            $$PWD/../../Source/lighting_technique.h \
+<<<<<<< HEAD
+           $$PWD/../../Common/ogldev_app.cpp \
+           $$PWD/../../Source/Tutorial17/Tutorial17.h \
+           $$PWD/../../Source/Tutorial18/Tutorial18.h
+=======
            $$PWD/../../Common/ogldev_app.cpp
+>>>>>>> dev
 
 LIBS +=  -L$$PWD/../../Lib
 

@@ -160,7 +160,7 @@ static void MouseCB(int Button, int State, int x, int y)
 }
 
 
-static void InitCallbacks()
+void Attempt::InitCallbacks()
 {
     glutDisplayFunc(RenderSceneCB);
     glutIdleFunc(IdleCB);
@@ -235,7 +235,7 @@ void GLUTBackendRun(ICallbacks* pCallbacks)
     }
 
     s_pCallbacks = pCallbacks;
-    InitCallbacks();
+    Attempt::InitCallbacks();
     glutMainLoop();
 }
 

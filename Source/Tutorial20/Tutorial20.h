@@ -1,5 +1,5 @@
-#ifndef TUTORIAL17_H
-#define TUTORIAL17_H
+#ifndef TUTORIAL20_H
+#define TUTORIAL20_H
 
 #define WINDOW_WIDTH  1920
 #define WINDOW_HEIGHT 1080
@@ -17,41 +17,55 @@
 #include "ogldev_app.h"
 
 #ifdef __TUT_VERSION
-#if __TUT_VERSION == 17
+#if __TUT_VERSION == 20
 struct Vertex {
   Vector3f m_pos;
   Vector2f m_tex;
+  Vector3f m_normal;
 
   Vertex() {}
 
-  Vertex(Vector3f pos, Vector2f tex)
+  Vertex(const Vector3f& pos, const Vector2f& tex, const Vector3f& normal)
   {
     m_pos = pos;
     m_tex = tex;
+    m_normal = normal;
   }
+
+  Vertex(Vector3f pos, Vector2f tex)
+  {
+    m_pos    = pos;
+    m_tex    = tex;
+    m_normal = Vector3f(0.0f, 0.0f, 0.0f);
+  }
+
 };
 
+static const float FieldDepth = 20.0f;
+static const float FieldWidth = 10.0f;
 
-class Tutorial17 : public ICallbacks, public OgldevApp
+class Tutorial20 : public ICallbacks, public OgldevApp
 {
 public:
-  Tutorial17()
+  Tutorial20()
   {
     m_pGameCamera = NULL;
     m_pTexture = NULL;
     m_pEffect = NULL;
     m_scale = 0.0f;
     m_directionalLight.Color = Vector3f(1.0f, 1.0f, 1.0f);
-    m_directionalLight.AmbientIntensity = 0.5f;
+    m_directionalLight.AmbientIntensity = 0.0f;
+    m_directionalLight.DiffuseIntensity = 0.01f;
+    m_directionalLight.Direction = Vector3f(1.0f, -1.0, 0.0);
 
     m_persProjInfo.FOV = 60.0f;
     m_persProjInfo.Height = WINDOW_HEIGHT;
     m_persProjInfo.Width = WINDOW_WIDTH;
     m_persProjInfo.zNear = 1.0f;
-    m_persProjInfo.zFar = 100.0f;
+    m_persProjInfo.zFar = 50.0f;
   }
 
-  virtual ~Tutorial17()
+  virtual ~Tutorial20()
   {
     delete m_pEffect;
     delete m_pGameCamera;
@@ -67,7 +81,6 @@ public:
 private:
 
   GLuint m_VBO;
-  GLuint m_IBO;
   LightingTechnique* m_pEffect;
   Texture* m_pTexture;
   Camera* m_pGameCamera;
@@ -76,10 +89,9 @@ private:
   PersProjInfo m_persProjInfo;
 
   void CreateVertexBuffer();
-  void CreateIndexBuffer();
 };
 
 #endif
 #endif
 
-#endif // TUTORIAL17_H
+#endif // TUTORIAL20_H

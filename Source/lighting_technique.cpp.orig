@@ -18,12 +18,16 @@
 
 #include "lighting_technique.h"
 
+<<<<<<< HEAD
+=======
 #if __TUT_VERSION >= 20
   #include <limits.h>
   #include <string.h>
 
   #include "ogldev_util.h"
 #endif
+
+>>>>>>> dev
 
 LightingTechnique::LightingTechnique()
 {
@@ -50,15 +54,23 @@ bool LightingTechnique::Init(char* pVSFileName, char* pFSFileName)
   m_WVPLocation = GetUniformLocation("gWVP");
 
 
+<<<<<<< HEAD
+#if __TUT_VERSION == 18
+=======
 #if __TUT_VERSION >= 18  && __TUT_VERSION <= 20
+>>>>>>> dev
   m_WorldMatrixLocation = GetUniformLocation("gWorld");
 #endif
 
   m_samplerLocation = GetUniformLocation("gSampler");
+
+<<<<<<< HEAD
+=======
 #if __TUT_VERSION >= 19 && __TUT_VERSION <= 20
   m_eyeWorldPosLocation = GetUniformLocation("gEyeWorldPos");
 #endif
 
+>>>>>>> dev
 #if __TUT_VERSION == 17
   m_dirLightColorLocation = GetUniformLocation("gDirectionalLight.Color");
   m_dirLightAmbientIntensityLocation = GetUniformLocation("gDirectionalLight.AmbientIntensity");
@@ -76,11 +88,18 @@ bool LightingTechnique::Init(char* pVSFileName, char* pFSFileName)
 #if __TUT_VERSION >= 18  && __TUT_VERSION <= 20
   m_dirLightLocation.Direction = GetUniformLocation("gDirectionalLight.Direction");
 
+<<<<<<< HEAD
 #if __TUT_VERSION >= 18 && __TUT_VERSION <= 19
+=======
+#if __TUT_VERSION == 19
+
+>>>>>>> dev
   m_dirLightLocation.Color = GetUniformLocation("gDirectionalLight.Color");
   m_dirLightLocation.AmbientIntensity = GetUniformLocation("gDirectionalLight.AmbientIntensity");
   m_dirLightLocation.DiffuseIntensity = GetUniformLocation("gDirectionalLight.DiffuseIntensity");
 
+<<<<<<< HEAD
+=======
 #elif __TUT_VERSION == 20
   m_dirLightLocation.Color = GetUniformLocation("gDirectionalLight.Base.Color");
   m_dirLightLocation.AmbientIntensity = GetUniformLocation("gDirectionalLight.Base.AmbientIntensity");
@@ -94,15 +113,21 @@ bool LightingTechnique::Init(char* pVSFileName, char* pFSFileName)
 #endif
 
 #if __TUT_VERSION <= 19
+>>>>>>> dev
   if (m_dirLightLocation.AmbientIntensity == 0xFFFFFFFF ||
       m_WVPLocation == 0xFFFFFFFF ||
       m_WorldMatrixLocation == 0xFFFFFFFF ||
       m_samplerLocation == 0xFFFFFFFF ||
+<<<<<<< HEAD
+=======
+
 #if __TUT_VERSION == 19
       m_eyeWorldPosLocation == 0xFFFFFFFF ||
       m_matSpecularIntensityLocation == 0xFFFFFFFF ||
       m_matSpecularPowerLocation == 0xFFFFFFFF ||
 #endif
+
+>>>>>>> dev
       m_dirLightLocation.Color == 0xFFFFFFFF ||
       m_dirLightLocation.DiffuseIntensity == 0xFFFFFFFF ||
       m_dirLightLocation.Direction == 0xFFFFFFFF) {
@@ -110,6 +135,8 @@ bool LightingTechnique::Init(char* pVSFileName, char* pFSFileName)
   }
 
   return true;
+<<<<<<< HEAD
+=======
 #elif __TUT_VERSION >= 20
   for (unsigned int i = 0 ; i < ARRAY_SIZE_IN_ELEMENTS(m_pointLightsLocation) ; i++) {
     char Name[128];
@@ -161,6 +188,7 @@ bool LightingTechnique::Init(char* pVSFileName, char* pFSFileName)
   }
 
   return true;
+>>>>>>> dev
 #endif
 #endif
 }
@@ -201,6 +229,10 @@ void LightingTechnique::SetDirectionalLight(const DirectionalLight& Light)
 #endif
 
 }
+<<<<<<< HEAD
+=======
+
+
 #if __TUT_VERSION >= 19 && __TUT_VERSION <= 20
 
 void LightingTechnique::SetEyeWorldPos(const Vector3f& EyeWorldPos)
@@ -236,3 +268,4 @@ void LightingTechnique::SetPointLights(unsigned int NumLights, const PointLight*
   }
 }
 #endif
+>>>>>>> dev
