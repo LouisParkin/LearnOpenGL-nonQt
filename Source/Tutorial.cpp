@@ -26,9 +26,9 @@ Texture* Tutorial::_pTexture = NULL;
 
 #ifdef __TUT_VERSION
 
-#if __TUT_VERSION == 17
+  #if __TUT_VERSION == 17
 
-  Tutorial17* Tutorial::_tutorial;
+    Tutorial17* Tutorial::_tutorial;
 
   #elif __TUT_VERSION == 18
 
@@ -41,7 +41,10 @@ Texture* Tutorial::_pTexture = NULL;
   #elif __TUT_VERSION == 20
 
     Tutorial20* Tutorial::_tutorial;
-#endif
+  #elif __TUT_VERSION == 21
+
+    Tutorial21* Tutorial::_tutorial;
+  #endif
 
 #endif
 
@@ -73,12 +76,12 @@ Tutorial::Tutorial(int tutorialId, int* argc, char* argv[]) : Tutorials(argc, ar
 #if __TUT_VERSION >= 17
     if (_tutorialID >= 17) {
       GLUTBackendInit(*argc, argv, false, false);
-    sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.vs", _tutorialID);
-    sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.fs", _tutorialID);
+      sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.vs", _tutorialID);
+      sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.fs", _tutorialID);
 //  sprintf(pVSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.vs", _tutorialID);
 //  sprintf(pFSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.fs", _tutorialID);
       return;
-  }
+    }
 #endif
 #endif
 
@@ -1320,7 +1323,7 @@ void Tutorial::initGlut()
   case 18:
   case 19:
   case 20:
-      return;
+    return;
   default:
     setWindowSize(WINDOW_WIDTH_1_14, WINDOW_HEIGHT_1_14);
     _pGameCamera = new Camera(WINDOW_WIDTH_1_14, WINDOW_HEIGHT_1_14);
@@ -1365,6 +1368,8 @@ void Tutorial::Run()
     _tutorial = new Tutorial19();
 #elif __TUT_VERSION == 20
     _tutorial = new Tutorial20();
+#elif __TUT_VERSION == 21
+    _tutorial = new Tutorial21();
 #endif
 
     if (!_tutorial->Init(pVSFileName, pFSFileName)) {

@@ -76,6 +76,18 @@ struct PointLight : public BaseLight {
 
 #endif // #2
 
+#if __TUT_VERSION >= 21
+struct SpotLight : public PointLight {
+  Vector3f Direction;
+  float Cutoff;
+
+  SpotLight()
+  {
+    Direction = Vector3f(0.0f, 0.0f, 0.0f);
+    Cutoff = 0.0f;
+  }
+};
+#endif
 
 class LightingTechnique : public Technique
 {
@@ -84,6 +96,9 @@ public:
 #if __TUT_VERSION >= 20 // #3
   static const unsigned int MAX_POINT_LIGHTS = 2;
 #endif // #3
+#if __TUT_VERSION >= 21 // #3
+  static const unsigned int MAX_SPOT_LIGHTS = 2;
+#endif
 
   LightingTechnique();
 
@@ -91,17 +106,22 @@ public:
 
   void SetWVP(const Matrix4f& WVP);
 
-#if __TUT_VERSION >= 18 && __TUT_VERSION <= 20 // #4
+#if __TUT_VERSION >= 18  // #4
   void SetWorldMatrix(const Matrix4f& WVP);
 #endif // #4
 
   void SetTextureUnit(unsigned int TextureUnit);
   void SetDirectionalLight(const DirectionalLight& Light);
 
-#if __TUT_VERSION == 20 // #5
+#if __TUT_VERSION >= 20 // #5
   void SetPointLights(unsigned int NumLights, const PointLight* pLights);
 #endif // #5
-#if __TUT_VERSION >= 19 && __TUT_VERSION <= 20
+
+#if __TUT_VERSION >= 21
+  void SetSpotLights(unsigned int NumLights, const SpotLight* pLights);
+#endif
+
+#if __TUT_VERSION >= 19
   void SetMatSpecularIntensity(float Intensity);
   void SetMatSpecularPower(float Power);
   void SetEyeWorldPos(const Vector3f& EyeWorldPos);
@@ -110,7 +130,7 @@ public:
 private:
 
   GLuint m_WVPLocation;
-#if __TUT_VERSION >= 18 && __TUT_VERSION <= 20 // #6
+#if __TUT_VERSION >= 18  // #6
   GLuint m_WorldMatrixLocation;
 #endif // #6
 
@@ -126,10 +146,14 @@ private:
   GLuint m_numPointLightsLocation;
 #endif // #8
 
+#if __TUT_VERSION >= 21
+  GLuint m_numSpotLightsLocation;
+#endif
+
 #if __TUT_VERSION == 17 // #9
   GLuint m_dirLightColorLocation;
   GLuint m_dirLightAmbientIntensityLocation;
-#elif __TUT_VERSION >= 18  && __TUT_VERSION <= 20 // #9
+#elif __TUT_VERSION >= 18   // #9
   struct {
     GLuint Color;
     GLuint AmbientIntensity;
@@ -153,6 +177,22 @@ private:
   } m_pointLightsLocation[MAX_POINT_LIGHTS];
 
 #endif // #10
+
+#if __TUT_VERSION >= 21
+  struct {
+    GLuint Color;
+    GLuint AmbientIntensity;
+    GLuint DiffuseIntensity;
+    GLuint Position;
+    GLuint Direction;
+    GLuint Cutoff;
+    struct {
+      GLuint Constant;
+      GLuint Linear;
+      GLuint Exp;
+    } Atten;
+  } m_spotLightsLocation[MAX_SPOT_LIGHTS];
+#endif
 };
 
 

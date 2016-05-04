@@ -72,17 +72,9 @@ private:
 
   static Tutorial20* _tutorial;
 
-#elif __TUT_VERSION == 18
+#elif __TUT_VERSION == 21
 
-  static Tutorial18* _tutorial;
-
-#elif __TUT_VERSION == 19
-
-  static Tutorial19* _tutorial;
-
-#elif __TUT_VERSION == 20
-
-  static Tutorial20* _tutorial;
+  static Tutorial21* _tutorial;
 
 #endif
 
