@@ -1,6 +1,5 @@
 /*
-
-	Copyright 2014 Etay Meiri
+        Copyright 2011 Etay Meiri
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,24 +15,28 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef SHADOWMAPFBO_H
+#define	SHADOWMAPFBO_H
 
-#ifndef OGLDEV_CALLBACKS_H
-#define OGLDEV_CALLBACKS_H
+#include <GL/glew.h>
 
-#include "ogldev_keys.h"
-
-class ICallbacks
+class ShadowMapFBO
 {
 public:
+    ShadowMapFBO();
 
-    virtual void KeyboardCB(OGLDEV_KEY , OGLDEV_KEY_STATE OgldevKeyState = OGLDEV_KEY_STATE_PRESS) {}
-    
-    virtual void PassiveMouseCB(int , int ) {}
+    ~ShadowMapFBO();
 
-    virtual void RenderSceneCB() {}
+    bool Init(unsigned int WindowWidth, unsigned int WindowHeight);
 
-    virtual void MouseCB(OGLDEV_MOUSE , OGLDEV_KEY_STATE , int , int ) {}
+    void BindForWriting();
+
+    void BindForReading(GLenum TextureUnit);
+
+private:
+    GLuint m_fbo;
+    GLuint m_shadowMap;
 };
 
+#endif	/* SHADOWMAPFBO_H */
 
-#endif

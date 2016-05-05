@@ -19,6 +19,8 @@
 #ifndef LIGHTING_TECHNIQUE_H // #1
 #define LIGHTING_TECHNIQUE_H
 
+#if __TUT_VERSION < 22
+
 #include "technique.h"
 #include "ogldev_math_3d.h"
 
@@ -195,5 +197,6 @@ private:
 #endif
 };
 
+#endif
 
 #endif  /* LIGHTING_TECHNIQUE_H */ // #1

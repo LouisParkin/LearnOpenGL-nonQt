@@ -1,6 +1,5 @@
 /*
-
-	Copyright 2014 Etay Meiri
+        Copyright 2011 Etay Meiri
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,26 +13,30 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
+#ifndef SHADOW_MAP_TECHNIQUE_H
+#define	SHADOW_MAP_TECHNIQUE_H
 
-#ifndef OGLDEV_CALLBACKS_H
-#define OGLDEV_CALLBACKS_H
+#include "technique.h"
+#include "ogldev_math_3d.h"
 
-#include "ogldev_keys.h"
+class ShadowMapTechnique : public Technique {
 
-class ICallbacks
-{
 public:
 
-    virtual void KeyboardCB(OGLDEV_KEY , OGLDEV_KEY_STATE OgldevKeyState = OGLDEV_KEY_STATE_PRESS) {}
-    
-    virtual void PassiveMouseCB(int , int ) {}
+    ShadowMapTechnique();
 
-    virtual void RenderSceneCB() {}
+    virtual bool Init(char* pVSFileName, char* pFSFileName);
 
-    virtual void MouseCB(OGLDEV_MOUSE , OGLDEV_KEY_STATE , int , int ) {}
+    void SetWVP(const Matrix4f& WVP);
+    void SetTextureUnit(unsigned int TextureUnit);
+private:
+
+    GLuint m_WVPLocation;
+    GLuint m_textureLocation;
 };
 
 
-#endif
+#endif	/* SHADOW_MAP_TECHNIQUE_H */
+

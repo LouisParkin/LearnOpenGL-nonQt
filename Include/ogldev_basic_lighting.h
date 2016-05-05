@@ -15,8 +15,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIGHTING_TECHNIQUE_H
-#define	LIGHTING_TECHNIQUE_H
+#ifndef BASIC_LIGHTING_TECHNIQUE_H
+#define	BASIC_LIGHTING_TECHNIQUE_H
 
 #include "technique.h"
 #include "ogldev_math_3d.h"
@@ -30,6 +30,7 @@ public:
     static const unsigned int MAX_SPOT_LIGHTS = 2;
 
     BasicLightingTechnique();
+    virtual ~BasicLightingTechnique(){}
 
     virtual bool Init(char* pVSFileName, char* pFSFileName);
 

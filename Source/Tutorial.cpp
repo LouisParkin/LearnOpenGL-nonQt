@@ -50,6 +50,10 @@ Texture* Tutorial::_pTexture = NULL;
 
     Tutorial22* Tutorial::_tutorial;
 
+  #elif __TUT_VERSION == 23
+
+    Tutorial23* Tutorial::_tutorial;
+
   #endif
 
 #endif
@@ -77,27 +81,33 @@ Tutorial::Tutorial(int tutorialId, int* argc, char* argv[]) : Tutorials(argc, ar
   }
   else if (_tutorialID >= 17 && _tutorialID <= 21) {
 
-#ifdef __TUT_VERSION
-
-#if __TUT_VERSION >= 17 && __TUT_VERSION <= 21
     GLUTBackendInit(*argc, argv, false, false);
     sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.vs", _tutorialID);
     sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.fs", _tutorialID);
 //  sprintf(pVSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.vs", _tutorialID);
 //  sprintf(pFSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.fs", _tutorialID);
     return;
-#endif
-
-
   }
-  else if (_tutorialID >= 22) {
-#if __TUT_VERSION >= 22
+
+  else if (_tutorialID == 22) {
+
     GLUTBackendInit(*argc, argv, false, false);
-
+    sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.vs", _tutorialID);
+    sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.fs", _tutorialID);
+//  sprintf(pVSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.vs", _tutorialID);
+//  sprintf(pFSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.fs", _tutorialID);
     return;
-#endif
   }
-#endif
+
+  else if (_tutorialID >= 23) {
+
+    GLUTBackendInit(*argc, argv, false, false);
+    sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shadow_map.vs", _tutorialID);
+    sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shadow_map.fs", _tutorialID);
+//  sprintf(pVSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shadow_map.vs", _tutorialID);
+//  sprintf(pFSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shadow_map.fs", _tutorialID);
+    return;
+  }
 
   _createVertexBuffer = makeCreateVertexBufferFunc(_VBO);
   _createIndexBuffer  = makeCreateIndexBufferFunc(_IBO);
@@ -1386,6 +1396,8 @@ void Tutorial::Run()
     _tutorial = new Tutorial21();
 #elif __TUT_VERSION == 22
     _tutorial = new Tutorial22();
+#elif __TUT_VERSION == 23
+    _tutorial = new Tutorial23();
 #endif
 
     if (!_tutorial->Init(pVSFileName, pFSFileName)) {

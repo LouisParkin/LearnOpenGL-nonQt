@@ -1,5 +1,5 @@
-#ifndef TUTORIAL22_H
-#define TUTORIAL22_H
+#ifndef TUTORIAL23_H
+#define TUTORIAL23_H
 
 #define WINDOW_WIDTH  1920
 #define WINDOW_HEIGHT 1080
@@ -13,36 +13,44 @@
 #include "ogldev_pipeline.h"
 #include "ogldev_camera.h"
 #include "ogldev_basic_lighting.h"
+#include "shadow_map_technique.h"
 #include "ogldev_glut_backend.h"
 #include "mesh.h"
+#include "shadow_map_fbo.h"
 
 #ifdef __TUT_VERSION
-#if __TUT_VERSION == 22
+#if __TUT_VERSION == 23
 
-static const float FieldDepth = 10.0f;
-
-class Tutorial22 : public ICallbacks
+class Tutorial23 : public ICallbacks, public OgldevApp
 {
 
 private:
 
-  BasicLightingTechnique* m_pEffect;
+  ShadowMapTechnique* m_pShadowMapTech;
   Camera* m_pGameCamera;
   float m_scale;
-  DirectionalLight m_directionalLight;
+  SpotLight m_spotLight;
   Mesh* m_pMesh;
+  Mesh* m_pQuad;
+  ShadowMapFBO m_shadowMapFBO;
   PersProjInfo m_persProjInfo;
 
 public:
-  Tutorial22()
+  Tutorial23()
   {
+    m_pShadowMapTech = NULL;
     m_pGameCamera = NULL;
-    m_pEffect = NULL;
+    m_pMesh = NULL;
+    m_pQuad = NULL;
     m_scale = 0.0f;
-    m_directionalLight.Color = Vector3f(1.0f, 1.0f, 1.0f);
-    m_directionalLight.AmbientIntensity = 1.0f;
-    m_directionalLight.DiffuseIntensity = 0.01f;
-    m_directionalLight.Direction = Vector3f(1.0f, -1.0, 0.0);
+
+    m_spotLight.AmbientIntensity = 0.0f;
+    m_spotLight.DiffuseIntensity = 0.9f;
+    m_spotLight.Color = Vector3f(1.0f, 1.0f, 1.0f);
+    m_spotLight.Attenuation.Linear = 0.01f;
+    m_spotLight.Position  = Vector3f(-20.0, 20.0, 5.0f);
+    m_spotLight.Direction = Vector3f(1.0f, -1.0f, 0.0f);
+    m_spotLight.Cutoff =  20.0f;
 
     m_persProjInfo.FOV = 60.0f;
     m_persProjInfo.Height = WINDOW_HEIGHT;
@@ -51,15 +59,20 @@ public:
     m_persProjInfo.zFar = 50.0f;
   }
 
-  ~Tutorial22()
+  ~Tutorial23()
   {
-    delete m_pEffect;
-    delete m_pGameCamera;
-    delete m_pMesh;
+    SAFE_DELETE(m_pShadowMapTech);
+    SAFE_DELETE(m_pGameCamera);
+    SAFE_DELETE(m_pMesh);
+    SAFE_DELETE(m_pQuad);
   }
+
   bool Init(char* pVSFileName, char* pFSFileName);
   void Run();
   virtual void RenderSceneCB();
+  virtual void ShadowMapPass();
+  virtual void RenderPass();
+
   void KeyboardCB(OGLDEV_KEY OgldevKey, OGLDEV_KEY_STATE OgldevKeyState = OGLDEV_KEY_STATE_PRESS);
   virtual void PassiveMouseCB(int x, int y);
 };
@@ -67,4 +80,4 @@ public:
 #endif
 #endif
 
-#endif // TUTORIAL22_H
+#endif // TUTORIAL23_H

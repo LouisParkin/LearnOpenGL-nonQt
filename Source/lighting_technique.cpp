@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+#if __TUT_VERSION < 22
 #include "lighting_technique.h"
 
 #if __TUT_VERSION >= 20
@@ -197,7 +197,7 @@ bool LightingTechnique::Init(char* pVSFileName, char* pFSFileName)
           SNPRINTF(Name, sizeof(Name), "gSpotLights[%d].Base.Base.Color", i);
           m_spotLightsLocation[i].Color = GetUniformLocation(Name);
 
-          SNPRINTF(Name, sizeof(Name), "gSpotLights[%d].Base.Base.AmbientIntensity", i);
+          SNPRINTF(Name, sizeof(Name), "g/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Project/ContentSpotLights[%d].Base.Base.AmbientIntensity", i);
           m_spotLightsLocation[i].AmbientIntensity = GetUniformLocation(Name);
 
           SNPRINTF(Name, sizeof(Name), "gSpotLights[%d].Base.Position", i);
@@ -334,4 +334,5 @@ void LightingTechnique::SetSpotLights(unsigned int NumLights, const SpotLight* p
         glUniform1f(m_spotLightsLocation[i].Atten.Exp,      pLights[i].Attenuation.Exp);
     }
 }
+#endif
 #endif
