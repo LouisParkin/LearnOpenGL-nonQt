@@ -24,6 +24,8 @@ int Tutorial::_tutorialID;
 GLuint   Tutorial::_gSampler;
 Texture* Tutorial::_pTexture = NULL;
 
+/// If the tutorial version for option 'h' was defined to be
+/// above or equal to 17, a separate class object is needed.
 #ifdef __TUT_VERSION
 
   #if __TUT_VERSION == 17
@@ -58,54 +60,64 @@ Texture* Tutorial::_pTexture = NULL;
 
 #endif
 
-std::function<void (void)> Tutorial::_createVertexBuffer;
-std::function<void (void)> Tutorial::_createIndexBuffer;
-std::function<void (void)> Tutorial::_compileShaders;
-std::function<void (void)> Tutorial::_displayFunc;
-std::function<void (void)> Tutorial::_idleFunc;
-std::function<void (int, int, int)> Tutorial::_specialFunc;
-std::function<void (GLuint, const char*, GLenum)> Tutorial::_addShaderFunc;
-std::function<void (int, int, int)>               Tutorial::_keyboardFunc;
-std::function<void (int, int)>                    Tutorial::_passiveMouseFunc;
+/// Below are a list of defined return-type values for storing lambda
+/// function pointers.  The lambda functions handle code differences for tutorials 1 - 16.
+std::function<void (void)> Tutorial::_createVertexBuffer;                      ///< a stored function for creating vertex buffers.
+std::function<void (void)> Tutorial::_createIndexBuffer;                       ///< a stored function for creating index buffers.
+std::function<void (void)> Tutorial::_compileShaders;                          ///< a stored function for compiling the shaders.
+std::function<void (void)> Tutorial::_displayFunc;                             ///< a stored function for rendering output.
+std::function<void (void)> Tutorial::_idleFunc;                                ///< a stored function for idling.
+std::function<void (int, int, int)> Tutorial::_specialFunc;                    ///< a stored function for handling special keyboard input.
+std::function<void (GLuint, const char*, GLenum)> Tutorial::_addShaderFunc;    ///< a stored function for adding shaders.
+std::function<void (int, int, int)>               Tutorial::_keyboardFunc;     ///< a stored function for handling regular keyboard input.
+std::function<void (int, int)>                    Tutorial::_passiveMouseFunc; ///< a stored function for handling mouse input.
 
 
 Tutorial::Tutorial(int tutorialId, int* argc, char* argv[]) : Tutorials(argc, argv)
 {
   _tutorialID = tutorialId;
   if (_tutorialID <= 16) {
-    sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shader.vs", _tutorialID);
+    sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shader.vs", _tutorialID); ///< For tutorials 1 to 16, the shaders are located and named in a similar manner.
     sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shader.fs", _tutorialID);
 //  sprintf(pVSFileName, "/home/louis/Projects/LearnOpenGL-nonQt/Shaders/Tutorial%d/shader.vs", _tutorialID);
 //  sprintf(pFSFileName, "/home/louis/Projects/LearnOpenGL-nonQt/Shaders/Tutorial%d/shader.fs", _tutorialID);
     glutInit(argc, argv);
   }
-  else if (_tutorialID >= 17 && _tutorialID <= 21) {
+  else if(_tutorialID >= 17 && _tutorialID <= 23)
+  {
+    bool withDepth = false;
+    bool withStencil = false;
 
-    GLUTBackendInit(*argc, argv, false, false);
-    sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.vs", _tutorialID);
-    sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.fs", _tutorialID);
-//  sprintf(pVSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.vs", _tutorialID);
-//  sprintf(pFSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.fs", _tutorialID);
-    return;
-  }
+    if (_tutorialID > 21)
+    {
+      withDepth = true;
+    }
 
-  else if (_tutorialID == 22) {
+    GLUTBackendInit(*argc, argv, withDepth, withStencil);
 
-    GLUTBackendInit(*argc, argv, false, false);
-    sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.vs", _tutorialID);
-    sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.fs", _tutorialID);
-//  sprintf(pVSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.vs", _tutorialID);
-//  sprintf(pFSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.fs", _tutorialID);
-    return;
-  }
+    if (_tutorialID >= 17 && _tutorialID <= 21) {
 
-  else if (_tutorialID >= 23) {
+      sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.vs", _tutorialID); ///< For tutorials 17 to 21, the shaders are located and named in a similar manner.
+      sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.fs", _tutorialID);
+  //  sprintf(pVSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.vs", _tutorialID);
+  //  sprintf(pFSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.fs", _tutorialID);
+    }
 
-    GLUTBackendInit(*argc, argv, false, false);
-    sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shadow_map.vs", _tutorialID);
-    sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shadow_map.fs", _tutorialID);
-//  sprintf(pVSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shadow_map.vs", _tutorialID);
-//  sprintf(pFSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shadow_map.fs", _tutorialID);
+    else if (_tutorialID == 22) {
+
+      sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.vs", _tutorialID); ///> For tutorial 22, the shaders are located and named more uniquely.
+      sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.fs", _tutorialID);
+  //  sprintf(pVSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.vs", _tutorialID);
+  //  sprintf(pFSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.fs", _tutorialID);
+    }
+
+    else if (_tutorialID >= 23) {
+
+      sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shadow_map.vs", _tutorialID); ///> For tutorial 22, the shaders are located and named more uniquely.
+      sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shadow_map.fs", _tutorialID);
+  //  sprintf(pVSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shadow_map.vs", _tutorialID);
+  //  sprintf(pFSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shadow_map.fs", _tutorialID);
+    }
     return;
   }
 
@@ -151,8 +163,8 @@ std::function<void (void)> Tutorial::makeCompileShadersFunc()
         exit(1);
       };
 
-      aAddShader(ShaderProgram, vs.c_str(), GL_VERTEX_SHADER);
-      aAddShader(ShaderProgram, fs.c_str(), GL_FRAGMENT_SHADER);
+      addShader(ShaderProgram, vs.c_str(), GL_VERTEX_SHADER);
+      addShader(ShaderProgram, fs.c_str(), GL_FRAGMENT_SHADER);
 
       GLint Success = 0;
       GLchar ErrorLog[1024] = { 0 };
@@ -203,8 +215,8 @@ std::function<void (void)> Tutorial::makeCompileShadersFunc()
       };
 
       /// Add the shaders to the shader program.
-      aAddShader(ShaderProgram, vs.c_str(), GL_VERTEX_SHADER);
-      aAddShader(ShaderProgram, fs.c_str(), GL_FRAGMENT_SHADER);
+      addShader(ShaderProgram, vs.c_str(), GL_VERTEX_SHADER);
+      addShader(ShaderProgram, fs.c_str(), GL_FRAGMENT_SHADER);
 
       GLint Success = 0;
       GLchar ErrorLog[1024] = { 0 };
@@ -275,8 +287,8 @@ std::function<void (void)> Tutorial::makeCompileShadersFunc()
       };
 
       /// Add the shaders to the shader program.
-      aAddShader(ShaderProgram, vs.c_str(), GL_VERTEX_SHADER);
-      aAddShader(ShaderProgram, fs.c_str(), GL_FRAGMENT_SHADER);
+      addShader(ShaderProgram, vs.c_str(), GL_VERTEX_SHADER);
+      addShader(ShaderProgram, fs.c_str(), GL_FRAGMENT_SHADER);
 
       GLint Success = 0;
       GLchar ErrorLog[1024] = { 0 };
@@ -343,8 +355,8 @@ std::function<void (void)> Tutorial::makeCompileShadersFunc()
       };
 
       /// Add the shaders to the shader program.
-      aAddShader(ShaderProgram, vs.c_str(), GL_VERTEX_SHADER);
-      aAddShader(ShaderProgram, fs.c_str(), GL_FRAGMENT_SHADER);
+      addShader(ShaderProgram, vs.c_str(), GL_VERTEX_SHADER);
+      addShader(ShaderProgram, fs.c_str(), GL_FRAGMENT_SHADER);
 
       GLint Success = 0;
       GLchar ErrorLog[1024] = { 0 };
@@ -409,8 +421,8 @@ std::function<void (void)> Tutorial::makeCompileShadersFunc()
       };
 
       /// Add the shaders to the shader program.
-      aAddShader(shaderProgram, vs.c_str(), GL_VERTEX_SHADER);
-      aAddShader(shaderProgram, fs.c_str(), GL_FRAGMENT_SHADER);
+      addShader(shaderProgram, vs.c_str(), GL_VERTEX_SHADER);
+      addShader(shaderProgram, fs.c_str(), GL_FRAGMENT_SHADER);
 
       GLint Success = 0;
       GLchar ErrorLog[1024] = { 0 };
@@ -1346,6 +1358,7 @@ void Tutorial::initGlut()
   case 20:
   case 21:
   case 22:
+  case 23:
     return;
 
   default:
@@ -1484,7 +1497,7 @@ void Tutorial::compileShaders()
   }
 }
 
-void Tutorial::aAddShader(GLuint ShaderProgram, const char* pShaderText, GLenum ShaderType)
+void Tutorial::addShader(GLuint ShaderProgram, const char* pShaderText, GLenum ShaderType)
 {
   if (_addShaderFunc != nullptr) {
     _addShaderFunc(ShaderProgram, pShaderText, ShaderType);

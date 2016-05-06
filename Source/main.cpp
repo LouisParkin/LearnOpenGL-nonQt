@@ -9,6 +9,7 @@
 
 using namespace std;
 
+/// ClearScreen function to clean the terminal contents.
 void ClearScreen()
 {
   if (!cur_term) {
@@ -22,9 +23,13 @@ void ClearScreen()
   putp(tigetstr("clear"));
 }
 
+/// Prints the menu for tutorial selection.
 void printMenu()
 {
+  /// Clear the screen so the menu is the only thing visible afterwards.
   ClearScreen();
+
+  /// Print the menu options.
   cout << "Please Make A Selection" << endl;
   cout << "------------------------------------------------------" << endl;
   cout << "... ( 4 ) ... Tutorial 4  ..." << endl;
@@ -40,11 +45,22 @@ void printMenu()
   cout << "... ( e ) ... Tutorial 14 ..." << endl;
   cout << "... ( f ) ... Tutorial 15 ..." << endl;
   cout << "... ( g ) ... Tutorial 16 ..." << endl;
+
+  /// All the tutorials up to tutorial 16 can co-exist, as they all use the same
+  /// pattern flow for execution.  From 17 onward, that pattern changed significantly
+  /// and in the interest of keeping all the tutrials in the same application, a
+  /// compile-time define was added to declare the menu option for selection 'g'.
+
 #ifdef __TUT_VERSION
+
 #if __TUT_VERSION >= 17
+
   cout << "... ( h ) ... Tutorial " << __TUT_VERSION << " ..." << endl;
+
 #endif
+
 #endif
+
   cout << "------------------------------------------------------" << endl;
   cout << "... ( 0 ) ... Quit        ..." << endl;
   cout << "------------------------------------------------------" << endl;
@@ -52,15 +68,19 @@ void printMenu()
 
 int main(int argc, char* argv[])
 {
+  /// The tutorial Object that manages and runs the tutorial content.
   Tutorial* tut;
 
+  /// Print the menu.
   printMenu();
 
   char input[10];
 
   while (1) {
+    /// Capture the user's choice.
     cin.getline(input, 2);
 
+    /// Decide what to do with the provided user input.
     switch (input[0]) {
     case '4' :
       tut = &Tutorial::getInstance(4, &argc, argv);
@@ -102,24 +122,28 @@ int main(int argc, char* argv[])
       tut = &Tutorial::getInstance(16, &argc, argv);
       break;
 
+      /// Menu option 'h' will launch a different tutorial for every compiled defined version.
+
 #ifdef __TUT_VERSION
+
 #if __TUT_VERSION >= 17
+
     case 'h' :
       tut = &Tutorial::getInstance(__TUT_VERSION, &argc, argv);
       break;
+
 #endif
+
 #endif
 
     case '0' :
       return 0;
     default  :
       cout << "Not a valid choice.  Try again." << endl;
-      cin.getline(input, 2);
-
       continue;
     }
 
-    // Exec choice here
+    /// Executes the Run function for the tutorial that was set up above.
     tut->Run();
 
     break;

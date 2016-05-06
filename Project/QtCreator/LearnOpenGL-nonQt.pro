@@ -53,7 +53,7 @@ SOURCES += \
 
 
 
-message(Building for Tutorials 4-14 and $$TUT_VERSION)
+message(Building for Tutorials 4-16 and $$TUT_VERSION)
 FILE_EXT = ".cpp"
 greaterThan(TUT_VERSION,16) {
 

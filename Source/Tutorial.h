@@ -29,7 +29,7 @@ protected:
   static void createVertexBuffer();
   static void createIndexBuffer();
   static void compileShaders();
-  static void aAddShader(GLuint ShaderProgram, const char* pShaderText, GLenum ShaderType);
+  static void addShader(GLuint ShaderProgram, const char* pShaderText, GLenum ShaderType);
   static void specialKeyboardCB(int Key, int x, int y);
   static void keyboardCB(unsigned char Key, int x, int y);
   static void passiveMouseCB(int x, int y);
