@@ -83,13 +83,11 @@ Tutorial::Tutorial(int tutorialId, int* argc, char* argv[]) : Tutorials(argc, ar
 //  sprintf(pFSFileName, "/home/louis/Projects/LearnOpenGL-nonQt/Shaders/Tutorial%d/shader.fs", _tutorialID);
     glutInit(argc, argv);
   }
-  else if(_tutorialID >= 17 && _tutorialID <= 23)
-  {
+  else if (_tutorialID >= 17 && _tutorialID <= 23) {
     bool withDepth = false;
     bool withStencil = false;
 
-    if (_tutorialID > 21)
-    {
+    if (_tutorialID > 21) {
       withDepth = true;
     }
 
@@ -99,46 +97,118 @@ Tutorial::Tutorial(int tutorialId, int* argc, char* argv[]) : Tutorials(argc, ar
 
       sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.vs", _tutorialID); ///< For tutorials 17 to 21, the shaders are located and named in a similar manner.
       sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.fs", _tutorialID);
-  //  sprintf(pVSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.vs", _tutorialID);
-  //  sprintf(pFSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.fs", _tutorialID);
+      //  sprintf(pVSFileName, "/home/louis/Projects/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.vs", _tutorialID);
+      //  sprintf(pFSFileName, "/home/louis/Projects/LearnOpenGL-nonQt/Shaders/Tutorial%d/lighting.fs", _tutorialID);
     }
 
     else if (_tutorialID == 22) {
 
       sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.vs", _tutorialID); ///> For tutorial 22, the shaders are located and named more uniquely.
       sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.fs", _tutorialID);
-  //  sprintf(pVSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.vs", _tutorialID);
-  //  sprintf(pFSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.fs", _tutorialID);
+      //  sprintf(pVSFileName, "/home/louis/Projects/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.vs", _tutorialID);
+      //  sprintf(pFSFileName, "/home/louis/Projects/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.fs", _tutorialID);
     }
 
     else if (_tutorialID >= 23) {
 
-      sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shadow_map.vs", _tutorialID); ///> For tutorial 22, the shaders are located and named more uniquely.
+      sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shadow_map.vs", _tutorialID); ///> For tutorial 23, the shaders are located and named more uniquely.
       sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shadow_map.fs", _tutorialID);
-  //  sprintf(pVSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shadow_map.vs", _tutorialID);
-  //  sprintf(pFSFileName, "/home/louis/Projects/S3/LearnOpenGL-nonQt/Shaders/Tutorial%d/shadow_map.fs", _tutorialID);
+      //  sprintf(pVSFileName, "/home/louis/Projects/LearnOpenGL-nonQt/Shaders/Tutorial%d/shadow_map.vs", _tutorialID);
+      //  sprintf(pFSFileName, "/home/louis/Projects/LearnOpenGL-nonQt/Shaders/Tutorial%d/shadow_map.fs", _tutorialID);
     }
     return;
   }
 
-  _createVertexBuffer = makeCreateVertexBufferFunc(_VBO);
-  _createIndexBuffer  = makeCreateIndexBufferFunc(_IBO);
-  _addShaderFunc      = makeAddShaderFunc();
-  _compileShaders     = makeCompileShadersFunc();
-  _displayFunc        = makeDisplayFunc();
-  _idleFunc           = makeIdleFunc();
-  _specialFunc        = makeSpecialFunc();
-  _keyboardFunc       = makeKeyboardFunc();
-  _passiveMouseFunc   = makePassiveMouseFunc();
+  _createVertexBuffer = makeCreateVertexBufferFunc(_VBO); ///< Creation of version-specific lambda function that creates the vertex buffer.
+  _createIndexBuffer  = makeCreateIndexBufferFunc(_IBO);  ///< Creation of version-specific lambda function that creates the index buffer.
+  _addShaderFunc      = makeAddShaderFunc();              ///< Creation of version-specific lambda function that adds shaders.
+  _compileShaders     = makeCompileShadersFunc();         ///< Creation of version-specific lambda function that compiles shaders.
+  _displayFunc        = makeDisplayFunc();                ///< Creation of version-specific lambda function that is used for rendering.
+  _idleFunc           = makeIdleFunc();                   ///< Creation of version-specific lambda function that is used for idling.
+  _specialFunc        = makeSpecialFunc();                ///< Creation of version-specific lambda function that is used to handle special keyboard input.
+  _keyboardFunc       = makeKeyboardFunc();               ///< Creation of version-specific lambda function that is used to handle regular keyboard input.
+  _passiveMouseFunc   = makePassiveMouseFunc();           ///< Creation of version-specific lambda function that is used to handle mouse input.
 }
 
+/// Destructor method for the tutorial class.
 Tutorial::~Tutorial()
 {
 
 }
 
+/// Creation of version-specific lambda function that compiles shaders.
 std::function<void (void)> Tutorial::makeCompileShadersFunc()
 {
+
+  /// Create a new shader program.
+  static GLuint shaderProgram;
+
+  /// Define the functionality common to all 16 tutorials handled here.
+  auto common_functionality_all = [ & ]() {
+    shaderProgram = glCreateProgram();
+    /// Make strings for reading the GLSL source from file.
+    static std::string vs, fs;
+
+    /// Make sure the shader program creation succeeded.
+    if (shaderProgram == 0) {
+      fprintf(stderr, "Error creating shader program\n");
+      exit(1);
+    }
+
+    /// Read the vertex shader source from file.
+    if (!ReadFile(pVSFileName, vs)) {
+      exit(1);
+    };
+
+    /// Read the fragment shader source from file.
+    if (!ReadFile(pFSFileName, fs)) {
+      exit(1);
+    };
+
+    /// Add the shaders to the shader program.
+    addShader(shaderProgram, vs.c_str(), GL_VERTEX_SHADER);
+    addShader(shaderProgram, fs.c_str(), GL_FRAGMENT_SHADER);
+
+    static GLint Success = 0;
+    static GLchar ErrorLog[1024] = { 0 };
+
+    glLinkProgram(shaderProgram); ///< Link the shader program, assuming to the GL Context.
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &Success); ///< Get shader link status.
+
+    /// Handle error if linking failed.
+    if (Success == 0) {
+      glGetProgramInfoLog(shaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
+      fprintf(stderr, "Error linking shader program: '%s'\n", ErrorLog);
+      exit(1);
+    }
+
+    /// A shader program that links is not by definition valid, so validate it.
+    glValidateProgram(shaderProgram);
+
+    /// Retrieve the validation status.
+    glGetProgramiv(shaderProgram, GL_VALIDATE_STATUS, &Success);
+
+    /// Handle the error if validation failed.
+    if (!Success) {
+      glGetProgramInfoLog(shaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
+      fprintf(stderr, "Invalid shader program: '%s'\n", ErrorLog);
+      exit(1);
+    }
+
+    /// Assign a program for OpenGL to use.
+    glUseProgram(shaderProgram);
+  };
+
+  /// Define functionality common to Tutorials 15 and 16 only.
+  auto common_functionality_15_16 = [ & ]() {
+    /// This tutorial is about the use of Uniform shader attributes (matrices) to transform vertices, retrieve and store it.
+    _gWVPLocation = glGetUniformLocation(shaderProgram, "gWVP");
+
+    /// Ensure it succeeded, handle the possible failure.
+    assert(_gWVPLocation != 0xFFFFFFFF);
+  };
+
+  /// Determines the tutorial selected from the menu, jumps to that version's lambda-creation.
   switch (_tutorialID) {
   case 1:
   case 2:
@@ -146,109 +216,20 @@ std::function<void (void)> Tutorial::makeCompileShadersFunc()
     return nullptr;
   case 4:
     return [ & ]() {
-      GLuint ShaderProgram = glCreateProgram();
 
-      if (ShaderProgram == 0) {
-        fprintf(stderr, "Error creating shader program\n");
-        exit(1);
-      }
+      /// Call common functionality.
+      common_functionality_all();
 
-      std::string vs, fs;
-
-      if (!ReadFile(pVSFileName, vs)) {
-        exit(1);
-      };
-
-      if (!ReadFile(pFSFileName, fs)) {
-        exit(1);
-      };
-
-      addShader(ShaderProgram, vs.c_str(), GL_VERTEX_SHADER);
-      addShader(ShaderProgram, fs.c_str(), GL_FRAGMENT_SHADER);
-
-      GLint Success = 0;
-      GLchar ErrorLog[1024] = { 0 };
-
-      glLinkProgram(ShaderProgram);
-      glGetProgramiv(ShaderProgram, GL_LINK_STATUS, &Success);
-      if (Success == 0) {
-        glGetProgramInfoLog(ShaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
-        fprintf(stderr, "Error linking shader program: '%s'\n", ErrorLog);
-        exit(1);
-      }
-
-      glValidateProgram(ShaderProgram);
-      glGetProgramiv(ShaderProgram, GL_VALIDATE_STATUS, &Success);
-      if (!Success) {
-        glGetProgramInfoLog(ShaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
-        fprintf(stderr, "Invalid shader program: '%s'\n", ErrorLog);
-        exit(1);
-      }
-
-      glUseProgram(ShaderProgram);
     };
   case 5:
     return [ & ]() {
-      /**
-       * Create a new shader program.
-       */
-      GLuint ShaderProgram = glCreateProgram();
 
+      /// Call common functionality.
+      common_functionality_all();
 
-      /// Make sure the shader program creation succeeded.
-      if (ShaderProgram == 0) {
-        fprintf(stderr, "Error creating shader program\n");
-        exit(1);
-      }
-
-      /// Make strings for reading the GLSL source from file.
-      std::string vs, fs;
-
-      /// Read the vertex shader source from file.
-      if (!ReadFile(pVSFileName, vs)) {
-        exit(1);
-      };
-
-      /// Read the fragment shader source from file.
-      if (!ReadFile(pFSFileName, fs)) {
-        exit(1);
-      };
-
-      /// Add the shaders to the shader program.
-      addShader(ShaderProgram, vs.c_str(), GL_VERTEX_SHADER);
-      addShader(ShaderProgram, fs.c_str(), GL_FRAGMENT_SHADER);
-
-      GLint Success = 0;
-      GLchar ErrorLog[1024] = { 0 };
-
-      glLinkProgram(ShaderProgram); ///< Link the shader program, assuming to the GL Context.
-      glGetProgramiv(ShaderProgram, GL_LINK_STATUS, &Success); ///< Get shader link status.
-
-      /// Handle error if linking failed.
-      if (Success == 0) {
-        glGetProgramInfoLog(ShaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
-        fprintf(stderr, "Error linking shader program: '%s'\n", ErrorLog);
-        exit(1);
-      }
-
-      /// A shader program that links is not by definition valid, so validate it.
-      glValidateProgram(ShaderProgram);
-
-      /// Retrieve the validation status.
-      glGetProgramiv(ShaderProgram, GL_VALIDATE_STATUS, &Success);
-
-      /// Handle the error if validation failed.
-      if (!Success) {
-        glGetProgramInfoLog(ShaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
-        fprintf(stderr, "Invalid shader program: '%s'\n", ErrorLog);
-        exit(1);
-      }
-
-      /// Assign a program for OpenGL to use.
-      glUseProgram(ShaderProgram);
-
+      /// Below functionality specific to this tutorial only.
       /// This tutorial is about the use of Uniform shader attributes, retrieve and store it.
-      _gScaleLocation = glGetUniformLocation(ShaderProgram, "gScale");
+      _gScaleLocation = glGetUniformLocation(shaderProgram, "gScale");
 
       /// Ensure it succeeded, handle the possible failure.
       assert(_gScaleLocation != 0xFFFFFFFF);
@@ -261,66 +242,13 @@ std::function<void (void)> Tutorial::makeCompileShadersFunc()
   case 11:
   case 12:
     return [ & ]() {
-      /**
-       * Create a new shader program.
-       */
-      GLuint ShaderProgram = glCreateProgram();
 
+      /// Call common functionality.
+      common_functionality_all();
 
-      /// Make sure the shader program creation succeeded.
-      if (ShaderProgram == 0) {
-        fprintf(stderr, "Error creating shader program\n");
-        exit(1);
-      }
-
-      /// Make strings for reading the GLSL source from file.
-      std::string vs, fs;
-
-      /// Read the vertex shader source from file.
-      if (!ReadFile(pVSFileName, vs)) {
-        exit(1);
-      };
-
-      /// Read the fragment shader source from file.
-      if (!ReadFile(pFSFileName, fs)) {
-        exit(1);
-      };
-
-      /// Add the shaders to the shader program.
-      addShader(ShaderProgram, vs.c_str(), GL_VERTEX_SHADER);
-      addShader(ShaderProgram, fs.c_str(), GL_FRAGMENT_SHADER);
-
-      GLint Success = 0;
-      GLchar ErrorLog[1024] = { 0 };
-
-      glLinkProgram(ShaderProgram); ///< Link the shader program, assuming to the GL Context.
-      glGetProgramiv(ShaderProgram, GL_LINK_STATUS, &Success); ///< Get shader link status.
-
-      /// Handle error if linking failed.
-      if (Success == 0) {
-        glGetProgramInfoLog(ShaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
-        fprintf(stderr, "Error linking shader program: '%s'\n", ErrorLog);
-        exit(1);
-      }
-
-      /// A shader program that links is not by definition valid, so validate it.
-      glValidateProgram(ShaderProgram);
-
-      /// Retrieve the validation status.
-      glGetProgramiv(ShaderProgram, GL_VALIDATE_STATUS, &Success);
-
-      /// Handle the error if validation failed.
-      if (!Success) {
-        glGetProgramInfoLog(ShaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
-        fprintf(stderr, "Invalid shader program: '%s'\n", ErrorLog);
-        exit(1);
-      }
-
-      /// Assign a program for OpenGL to use.
-      glUseProgram(ShaderProgram);
-
+      /// Below functionality specific to all tutorials from 6 to 12. It was not wrapped in a lambda, because it is not repeated anywhere.
       /// This tutorial is about the use of Uniform shader attributes (matrices) to transform vertices, retrieve and store it.
-      _gWorldLocation = glGetUniformLocation(ShaderProgram, "gWorld");
+      _gWorldLocation = glGetUniformLocation(shaderProgram, "gWorld");
 
       /// Ensure it succeeded, handle the possible failure.
       assert(_gWorldLocation != 0xFFFFFFFF);
@@ -329,135 +257,20 @@ std::function<void (void)> Tutorial::makeCompileShadersFunc()
   case 14:
   case 15:
     return [ & ]() {
-      /**
-       * Create a new shader program.
-       */
-      GLuint ShaderProgram = glCreateProgram();
 
+      /// Call common functionality.
+      common_functionality_all();
+      common_functionality_15_16();
 
-      /// Make sure the shader program creation succeeded.
-      if (ShaderProgram == 0) {
-        fprintf(stderr, "Error creating shader program\n");
-        exit(1);
-      }
-
-      /// Make strings for reading the GLSL source from file.
-      std::string vs, fs;
-
-      /// Read the vertex shader source from file.
-      if (!ReadFile(pVSFileName, vs)) {
-        exit(1);
-      };
-
-      /// Read the fragment shader source from file.
-      if (!ReadFile(pFSFileName, fs)) {
-        exit(1);
-      };
-
-      /// Add the shaders to the shader program.
-      addShader(ShaderProgram, vs.c_str(), GL_VERTEX_SHADER);
-      addShader(ShaderProgram, fs.c_str(), GL_FRAGMENT_SHADER);
-
-      GLint Success = 0;
-      GLchar ErrorLog[1024] = { 0 };
-
-      glLinkProgram(ShaderProgram); ///< Link the shader program, assuming to the GL Context.
-      glGetProgramiv(ShaderProgram, GL_LINK_STATUS, &Success); ///< Get shader link status.
-
-      /// Handle error if linking failed.
-      if (Success == 0) {
-        glGetProgramInfoLog(ShaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
-        fprintf(stderr, "Error linking shader program: '%s'\n", ErrorLog);
-        exit(1);
-      }
-
-      /// A shader program that links is not by definition valid, so validate it.
-      glValidateProgram(ShaderProgram);
-
-      /// Retrieve the validation status.
-      glGetProgramiv(ShaderProgram, GL_VALIDATE_STATUS, &Success);
-
-      /// Handle the error if validation failed.
-      if (!Success) {
-        glGetProgramInfoLog(ShaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
-        fprintf(stderr, "Invalid shader program: '%s'\n", ErrorLog);
-        exit(1);
-      }
-
-      /// Assign a program for OpenGL to use.
-      glUseProgram(ShaderProgram);
-
-      /// This tutorial is about the use of Uniform shader attributes (matrices) to transform vertices, retrieve and store it.
-      _gWVPLocation = glGetUniformLocation(ShaderProgram, "gWVP");
-
-      /// Ensure it succeeded, handle the possible failure.
-      assert(_gWVPLocation != 0xFFFFFFFF);
     };
   case 16:
     return [ & ]() {
-      /**
-       * Create a new shader program.
-       */
-      GLuint shaderProgram = glCreateProgram();
 
+      /// Call common functionality.
+      common_functionality_all();
+      common_functionality_15_16();
 
-      /// Make sure the shader program creation succeeded.
-      if (shaderProgram == 0) {
-        fprintf(stderr, "Error creating shader program\n");
-        exit(1);
-      }
-
-      /// Make strings for reading the GLSL source from file.
-      std::string vs, fs;
-
-      /// Read the vertex shader source from file.
-      if (!ReadFile(pVSFileName, vs)) {
-        exit(1);
-      };
-
-      /// Read the fragment shader source from file.
-      if (!ReadFile(pFSFileName, fs)) {
-        exit(1);
-      };
-
-      /// Add the shaders to the shader program.
-      addShader(shaderProgram, vs.c_str(), GL_VERTEX_SHADER);
-      addShader(shaderProgram, fs.c_str(), GL_FRAGMENT_SHADER);
-
-      GLint Success = 0;
-      GLchar ErrorLog[1024] = { 0 };
-
-      glLinkProgram(shaderProgram); ///< Link the shader program, assuming to the GL Context.
-      glGetProgramiv(shaderProgram, GL_LINK_STATUS, &Success); ///< Get shader link status.
-
-      /// Handle error if linking failed.
-      if (Success == 0) {
-        glGetProgramInfoLog(shaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
-        fprintf(stderr, "Error linking shader program: '%s'\n", ErrorLog);
-        exit(1);
-      }
-
-      /// A shader program that links is not by definition valid, so validate it.
-      glValidateProgram(shaderProgram);
-
-      /// Retrieve the validation status.
-      glGetProgramiv(shaderProgram, GL_VALIDATE_STATUS, &Success);
-
-      /// Handle the error if validation failed.
-      if (!Success) {
-        glGetProgramInfoLog(shaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
-        fprintf(stderr, "Invalid shader program: '%s'\n", ErrorLog);
-        exit(1);
-      }
-
-      /// Assign a program for OpenGL to use.
-      glUseProgram(shaderProgram);
-
-      /// This tutorial is about the use of Uniform shader attributes (matrices) to transform vertices, retrieve and store it.
-      _gWVPLocation = glGetUniformLocation(shaderProgram, "gWVP");
-
-      /// Ensure it succeeded, handle the possible failure.
-      assert(_gWVPLocation != 0xFFFFFFFF);
+      /// Below functionality specific to this tutorial only.
       _gSampler = glGetUniformLocation(shaderProgram, "gSampler");
       assert(_gSampler != 0xFFFFFFFF);
     };
