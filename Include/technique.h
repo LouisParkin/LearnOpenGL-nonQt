@@ -30,7 +30,7 @@ public:
 
     virtual ~Technique();
 
-    virtual bool Init(char* pVSFileName, char* pFSFileName);
+    virtual bool Init(char*, char*);
 
     void Enable();
 

@@ -73,7 +73,8 @@ std::function<void (int, int, int)>               Tutorial::_keyboardFunc;     /
 std::function<void (int, int)>                    Tutorial::_passiveMouseFunc; ///< a stored function for handling mouse input.
 
 
-Tutorial::Tutorial(int tutorialId, int* argc, char* argv[]) : Tutorials(argc, argv)
+Tutorial::Tutorial(int tutorialId, int* argc, char* argv[])
+  : Tutorials()
 {
   _tutorialID = tutorialId;
   if (_tutorialID <= 16) {
@@ -103,10 +104,10 @@ Tutorial::Tutorial(int tutorialId, int* argc, char* argv[]) : Tutorials(argc, ar
 
     else if (_tutorialID == 22) {
 
-      sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.vs", _tutorialID); ///> For tutorial 22, the shaders are located and named more uniquely.
-      sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.fs", _tutorialID);
-      //  sprintf(pVSFileName, "/home/louis/Projects/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.vs", _tutorialID);
-      //  sprintf(pFSFileName, "/home/louis/Projects/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.fs", _tutorialID);
+      sprintf(pVSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.vs"); ///> For tutorial 22, the shaders are located and named more uniquely.
+      sprintf(pFSFileName, "/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.fs");
+      //  sprintf(pVSFileName, "/home/louis/Projects/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.vs");
+      //  sprintf(pFSFileName, "/home/louis/Projects/LearnOpenGL-nonQt/Common/Shaders/basic_lighting.fs");
     }
 
     else if (_tutorialID >= 23) {
@@ -275,6 +276,7 @@ std::function<void (void)> Tutorial::makeCompileShadersFunc()
       assert(_gSampler != 0xFFFFFFFF);
     };
   }
+  return nullptr;
 }
 
 std::function<void ()> Tutorial::makeDisplayFunc()
@@ -748,6 +750,7 @@ std::function<void ()> Tutorial::makeDisplayFunc()
       //  QThread::msleep(1);};
     };
   }
+  return nullptr;
 }
 
 std::function<void ()> Tutorial::makeIdleFunc()
@@ -772,6 +775,7 @@ std::function<void ()> Tutorial::makeIdleFunc()
   case 16:
     return makeDisplayFunc();
   }
+  return nullptr;
 }
 
 std::function<void (GLuint, const char*, GLenum)> Tutorial::makeAddShaderFunc()
@@ -827,6 +831,7 @@ std::function<void (GLuint, const char*, GLenum)> Tutorial::makeAddShaderFunc()
       glAttachShader(ShaderProgram, ShaderObj);
     };
   }
+  return nullptr;
 }
 
 std::function<void (int, int, int)> Tutorial::makeSpecialFunc()
@@ -845,15 +850,16 @@ std::function<void (int, int, int)> Tutorial::makeSpecialFunc()
   case 11:
   case 12:
   case 13:
-    return nullptr;
+    return nullptr; ///< special function only required for tutorials 14 - 16.
   case 14:
   case 15:
   case 16:
-    return [ & ](int Key, int x, int y) {
+    return [ & ](int Key, int , int ) {
       OGLDEV_KEY OgldevKey = GLUTKeyToOGLDEVKey(Key);
       _pGameCamera->OnKeyboard(OgldevKey);
     };
   }
+  return nullptr;
 }
 
 std::function<void (int, int, int)> Tutorial::makeKeyboardFunc()
@@ -862,7 +868,7 @@ std::function<void (int, int, int)> Tutorial::makeKeyboardFunc()
   case 1:
   case 2:
   case 3:
-    return nullptr;
+    return nullptr; ///< keyboard function required for tutorials 4 - 16.
   case 4:
   case 5:
   case 6:
@@ -876,7 +882,7 @@ std::function<void (int, int, int)> Tutorial::makeKeyboardFunc()
   case 14:
   case 15:
   case 16:
-    return [ & ](int Key, int x, int y) {
+    return [ & ](int Key, int , int ) {
       switch (Key) {
       case 'q':
         glutLeaveMainLoop();
@@ -884,6 +890,7 @@ std::function<void (int, int, int)> Tutorial::makeKeyboardFunc()
       }
     };
   }
+  return nullptr;
 }
 
 std::function<void (int, int)> Tutorial::makePassiveMouseFunc()
@@ -903,13 +910,14 @@ std::function<void (int, int)> Tutorial::makePassiveMouseFunc()
   case 12:
   case 13:
   case 14:
-    return nullptr;
+    return nullptr; ///< mouse function only required for tutorials 15 and 16.
   case 15:
   case 16:
     return [ & ](int x, int y) {
       _pGameCamera->OnMouse(x, y);
     };
   }
+  return nullptr;
 }
 
 std::function<void (void)> Tutorial::makeCreateIndexBufferFunc(GLuint& indexObjectBuffer)
@@ -918,7 +926,7 @@ std::function<void (void)> Tutorial::makeCreateIndexBufferFunc(GLuint& indexObje
   case 1:
   case 2:
   case 3:
-    return nullptr;
+    return nullptr; ///< index buffer function required for tutorials 4 - 16.
   case 4:
   case 5:
   case 6:
@@ -946,6 +954,7 @@ std::function<void (void)> Tutorial::makeCreateIndexBufferFunc(GLuint& indexObje
     };
 
   }
+  return nullptr;
 }
 
 std::function<void (void)> Tutorial::makeCreateVertexBufferFunc(GLuint& vertexObjectBuffer)
@@ -974,58 +983,42 @@ std::function<void (void)> Tutorial::makeCreateVertexBufferFunc(GLuint& vertexOb
   case 8:
   case 9:
     return [ & ]() {
-      /**
-         * Vector3f is a composite data type that consists of an x, y, and z coordinate.
-         * Vertices is an array of three coordinates.
-         */
+      /// Vector3f is a composite data type that consists of an x, y, and z coordinate.
+      /// Vertices is an array of three coordinates.
       Vector3f Vertices[3];
       Vertices[0] = Vector3f(-1.0f, -1.0f, 0.0f);
       Vertices[1] = Vector3f(1.0f, -1.0f, 0.0f);
       Vertices[2] = Vector3f(0.0f, 1.0f, 0.0f);
 
-      /**
-       * vertexObjectBuffer is a member GLuint that points to the vertex shader buffer (VBO = vertex buffer object)
-       * glGenBuffers makes the space available fort allocating to vertexObjectBuffer
-       */
+      /// vertexObjectBuffer is a member GLuint that points to the vertex shader buffer (VBO = vertex buffer object)
+      /// glGenBuffers makes the space available fort allocating to vertexObjectBuffer
       glGenBuffers(1, &vertexObjectBuffer);
 
-      /**
-       * glBindBuffer attaches the buffer (vertexObjectBuffer) as a space to be used for Arrayed buffer storage.
-       */
+      /// glBindBuffer attaches the buffer (vertexObjectBuffer) as a space to be used for Arrayed buffer storage.
       glBindBuffer(GL_ARRAY_BUFFER, vertexObjectBuffer);
 
-      /**
-       * glBufferData presents Vertices as the data location from where vertex data will be obtained.
-       */
+      /// glBufferData presents Vertices as the data location from where vertex data will be obtained.
       glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
     };
   case 10:
   case 11:
     return [ & ]() {
-      /**
-         * Vector3f is a composite data type that consists of an x, y, and z coordinate.
-         * Vertices is an array of three coordinates.
-         */
+      /// Vector3f is a composite data type that consists of an x, y, and z coordinate.
+      /// Vertices is an array of three coordinates.
       Vector3f Vertices[4];
       Vertices[0] = Vector3f(-1.0f, -1.0f, 0.0f);
       Vertices[1] = Vector3f(0.0f, -1.0f, 1.0f);
       Vertices[2] = Vector3f(1.0f, -1.0f, 0.0f);
       Vertices[3] = Vector3f(0.0f, 1.0f, 0.0f);
 
-      /**
-       * vertexObjectBuffer is a member GLuint that points to the vertex shader buffer (VBO = vertex buffer object)
-       * glGenBuffers makes the space available fort allocating to vertexObjectBuffer
-       */
+      /// vertexObjectBuffer is a member GLuint that points to the vertex shader buffer (VBO = vertex buffer object)
+      /// glGenBuffers makes the space available fort allocating to vertexObjectBuffer
       glGenBuffers(1, &vertexObjectBuffer);
 
-      /**
-       * glBindBuffer attaches the buffer (vertexObjectBuffer) as a space to be used for Arrayed buffer storage.
-       */
+      /// glBindBuffer attaches the buffer (vertexObjectBuffer) as a space to be used for Arrayed buffer storage.
       glBindBuffer(GL_ARRAY_BUFFER, vertexObjectBuffer);
 
-      /**
-       * glBufferData presents Vertices as the data location from where vertex data will be obtained.
-       */
+      /// glBufferData presents Vertices as the data location from where vertex data will be obtained.
       glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
     };
   case 12:
@@ -1033,61 +1026,46 @@ std::function<void (void)> Tutorial::makeCreateVertexBufferFunc(GLuint& vertexOb
   case 14:
   case 15:
     return [ & ]() {
-      /**
-         * Vector3f is a composite data type that consists of an x, y, and z coordinate.
-         * Vertices is an array of three coordinates.
-         */
+      /// Vector3f is a composite data type that consists of an x, y, and z coordinate.
+      /// Vertices is an array of three coordinates.
       Vector3f Vertices[4];
       Vertices[0] = Vector3f(-1.0f, -1.0f, 0.5773f);
       Vertices[1] = Vector3f(0.0f, -1.0f, -1.15475f);
       Vertices[2] = Vector3f(1.0f, -1.0f, 0.5773f);
       Vertices[3] = Vector3f(0.0f, 1.0f, 0.0f);
 
-      /**
-       * vertexObjectBuffer is a member GLuint that points to the vertex shader buffer (VBO = vertex buffer object)
-       * glGenBuffers makes the space available fort allocating to vertexObjectBuffer
-       */
+      /// vertexObjectBuffer is a member GLuint that points to the vertex shader buffer (VBO = vertex buffer object)
+      /// glGenBuffers makes the space available fort allocating to vertexObjectBuffer
       glGenBuffers(1, &vertexObjectBuffer);
 
-      /**
-       * glBindBuffer attaches the buffer (vertexObjectBuffer) as a space to be used for Arrayed buffer storage.
-       */
+      /// glBindBuffer attaches the buffer (vertexObjectBuffer) as a space to be used for Arrayed buffer storage.
       glBindBuffer(GL_ARRAY_BUFFER, vertexObjectBuffer);
 
-      /**
-       * glBufferData presents Vertices as the data location from where vertex data will be obtained.
-       */
+      /// glBufferData presents Vertices as the data location from where vertex data will be obtained.
       glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
     };
   case 16:
     return [ & ]() {
-      /**
-         * Vector3f is a composite data type that consists of an x, y, and z coordinate.
-         * Vertices is an array of three coordinates.
-         */
+      /// Vector3f is a composite data type that consists of an x, y, and z coordinate.
+      /// Vertices is an array of three coordinates.
       Vertex Vertices[4] = { Vertex(Vector3f(-1.0f, -1.0f, 0.5773f), Vector2f(0.0f, 0.0f)),
                              Vertex(Vector3f(0.0f, -1.0f, -1.15475f), Vector2f(0.5f, 0.0f)),
                              Vertex(Vector3f(1.0f, -1.0f, 0.5773f),  Vector2f(1.0f, 0.0f)),
                              Vertex(Vector3f(0.0f, 1.0f, 0.0f),      Vector2f(0.5f, 1.0f))
                            };
 
-      /**
-       * vertexObjectBuffer is a member GLuint that points to the vertex shader buffer (VBO = vertex buffer object)
-       * glGenBuffers makes the space available fort allocating to vertexObjectBuffer
-       */
+      /// vertexObjectBuffer is a member GLuint that points to the vertex shader buffer (VBO = vertex buffer object)
+      /// glGenBuffers makes the space available fort allocating to vertexObjectBuffer
       glGenBuffers(1, &vertexObjectBuffer);
 
-      /**
-       * glBindBuffer attaches the buffer (vertexObjectBuffer) as a space to be used for Arrayed buffer storage.
-       */
+      /// glBindBuffer attaches the buffer (vertexObjectBuffer) as a space to be used for Arrayed buffer storage.
       glBindBuffer(GL_ARRAY_BUFFER, vertexObjectBuffer);
 
-      /**
-       * glBufferData presents Vertices as the data location from where vertex data will be obtained.
-       */
+      /// glBufferData presents Vertices as the data location from where vertex data will be obtained.
       glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
     };
   }
+  return nullptr;
 }
 
 void Tutorial::initGlew()

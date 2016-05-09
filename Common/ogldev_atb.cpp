@@ -146,7 +146,7 @@ bool ATB::PassiveMouseCB(int x, int y)
 }
 
 
-bool ATB::MouseCB(OGLDEV_MOUSE Button, OGLDEV_KEY_STATE State, int x, int y)
+bool ATB::MouseCB(OGLDEV_MOUSE Button, OGLDEV_KEY_STATE State, int , int )
 {    
     TwMouseButtonID btn = (Button == OGLDEV_MOUSE_BUTTON_LEFT) ? TW_MOUSE_LEFT : TW_MOUSE_RIGHT;
     TwMouseAction ma = (State == OGLDEV_KEY_STATE_PRESS) ? TW_MOUSE_PRESSED : TW_MOUSE_RELEASED;

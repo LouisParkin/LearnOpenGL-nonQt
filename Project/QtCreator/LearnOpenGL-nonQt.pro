@@ -5,7 +5,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 #  Add the C++11 standard to allow use of lambda functions
-QMAKE_CXXFLAGS += -std=c++0x
+QMAKE_CXXFLAGS += -std=c++0x -Wall -pedantic
 
 #  The version number greater than 16 to be added as option 'h' on the menu.
 TUT_VERSION = 23

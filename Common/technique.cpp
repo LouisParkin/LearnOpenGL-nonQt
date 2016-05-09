@@ -46,7 +46,7 @@ Technique::~Technique()
 }
 
 
-bool Technique::Init(char* pVSFileName, char* pFSFileName)
+bool Technique::Init(char* , char* )
 {
     m_shaderProg = glCreateProgram();
 

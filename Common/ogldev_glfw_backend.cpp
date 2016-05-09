@@ -118,7 +118,7 @@ static OGLDEV_MOUSE GLFWMouseToOGLDEVMouse(uint Button)
 	return OGLDEV_MOUSE_UNDEFINED;
 }
 
-static void KeyCallback(GLFWwindow* pWindow, int key, int scancode, int action, int mods)
+static void KeyCallback(GLFWwindow* , int key, int , int action, int )
 {   
     OGLDEV_KEY OgldevKey = GLFWKeyToOGLDEVKey(key);   
     OGLDEV_KEY_STATE OgldevKeyState = (action == GLFW_PRESS) ? OGLDEV_KEY_STATE_PRESS : OGLDEV_KEY_STATE_RELEASE;
@@ -126,13 +126,13 @@ static void KeyCallback(GLFWwindow* pWindow, int key, int scancode, int action, 
 }
 
 
-static void CursorPosCallback(GLFWwindow* pWindow, double x, double y)
+static void CursorPosCallback(GLFWwindow* , double x, double y)
 {
     s_pCallbacks->PassiveMouseCB((int)x, (int)y);
 }
 
 
-static void MouseButtonCallback(GLFWwindow* pWindow, int Button, int Action, int Mode)
+static void MouseButtonCallback(GLFWwindow* pWindow, int Button, int Action, int )
 {
     OGLDEV_MOUSE OgldevMouse = GLFWMouseToOGLDEVMouse(Button);
 
@@ -165,7 +165,7 @@ void GLFWErrorCallback(int error, const char* description)
 }
 
 
-void GLFWBackendInit(int argc, char** argv, bool WithDepth, bool WithStencil)
+void GLFWBackendInit(int , char** , bool WithDepth, bool WithStencil)
 {
     sWithDepth = WithDepth;
     sWithStencil = WithStencil;

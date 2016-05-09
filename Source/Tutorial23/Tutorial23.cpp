@@ -82,7 +82,7 @@ void Tutorial23::RenderPass()
 }
 
 
-void Tutorial23::KeyboardCB(OGLDEV_KEY OgldevKey, OGLDEV_KEY_STATE OgldevKeyState)
+void Tutorial23::KeyboardCB(OGLDEV_KEY OgldevKey, OGLDEV_KEY_STATE )
 {
   switch (OgldevKey) {
   case OGLDEV_KEY_ESCAPE:

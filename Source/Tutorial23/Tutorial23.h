@@ -59,7 +59,7 @@ public:
     m_persProjInfo.zFar = 50.0f;
   }
 
-  ~Tutorial23()
+  virtual ~Tutorial23()
   {
     SAFE_DELETE(m_pShadowMapTech);
     SAFE_DELETE(m_pGameCamera);
@@ -73,7 +73,7 @@ public:
   virtual void ShadowMapPass();
   virtual void RenderPass();
 
-  void KeyboardCB(OGLDEV_KEY OgldevKey, OGLDEV_KEY_STATE OgldevKeyState = OGLDEV_KEY_STATE_PRESS);
+  void KeyboardCB(OGLDEV_KEY OgldevKey, OGLDEV_KEY_STATE = OGLDEV_KEY_STATE_PRESS);
   virtual void PassiveMouseCB(int x, int y);
 };
 

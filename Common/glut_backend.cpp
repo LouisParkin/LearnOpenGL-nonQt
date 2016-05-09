@@ -107,14 +107,14 @@ static OGLDEV_MOUSE GLUTMouseToOGLDEVMouse(uint Button)
 }
 
 
-static void SpecialKeyboardCB(int Key, int x, int y)
+static void SpecialKeyboardCB(int Key, int , int )
 {
     OGLDEV_KEY OgldevKey = GLUTKeyToOGLDEVKey(Key);
     s_pCallbacks->KeyboardCB(OgldevKey);
 }
 
 
-static void KeyboardCB(unsigned char Key, int x, int y)
+static void KeyboardCB(unsigned char Key, int , int )
 {
     
 	if (

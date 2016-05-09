@@ -19,7 +19,7 @@ public:
 
     void RenderSceneCB();
 
-    bool MouseCB(OGLDEV_MOUSE Button, OGLDEV_KEY_STATE State, int x, int y);
+    bool MouseCB(OGLDEV_MOUSE Button, OGLDEV_KEY_STATE State, int, int);
     
 };
 

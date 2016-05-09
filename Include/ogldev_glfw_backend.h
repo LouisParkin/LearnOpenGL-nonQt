@@ -22,7 +22,7 @@
 #include "ogldev_types.h"
 #include "ogldev_callbacks.h"
 
-void GLFWBackendInit(int argc, char** argv, bool WithDepth, bool WithStencil);
+void GLFWBackendInit(int, char**, bool WithDepth, bool WithStencil);
 
 void GLFWBackendTerminate();
 

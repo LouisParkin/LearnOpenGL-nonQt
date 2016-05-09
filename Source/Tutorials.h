@@ -64,7 +64,7 @@ public:
 #endif
 #endif
 
-  explicit Tutorials(int* argc, char* argv[]);
+  explicit Tutorials();
   virtual ~Tutorials();
 
 protected:
