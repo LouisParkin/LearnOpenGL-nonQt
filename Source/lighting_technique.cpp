@@ -192,47 +192,47 @@ bool LightingTechnique::Init(char* pVSFileName, char* pFSFileName)
 
 #if __TUT_VERSION >= 21
   for (unsigned int i = 0 ; i < ARRAY_SIZE_IN_ELEMENTS(m_spotLightsLocation) ; i++) {
-          char Name[128];
-          memset(Name, 0, sizeof(Name));
-          SNPRINTF(Name, sizeof(Name), "gSpotLights[%d].Base.Base.Color", i);
-          m_spotLightsLocation[i].Color = GetUniformLocation(Name);
+    char Name[128];
+    memset(Name, 0, sizeof(Name));
+    SNPRINTF(Name, sizeof(Name), "gSpotLights[%d].Base.Base.Color", i);
+    m_spotLightsLocation[i].Color = GetUniformLocation(Name);
 
-          SNPRINTF(Name, sizeof(Name), "g/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Project/ContentSpotLights[%d].Base.Base.AmbientIntensity", i);
-          m_spotLightsLocation[i].AmbientIntensity = GetUniformLocation(Name);
+    SNPRINTF(Name, sizeof(Name), "g/home/lparkin/Projects/S3/LearnOpenGL-nonQt/Project/ContentSpotLights[%d].Base.Base.AmbientIntensity", i);
+    m_spotLightsLocation[i].AmbientIntensity = GetUniformLocation(Name);
 
-          SNPRINTF(Name, sizeof(Name), "gSpotLights[%d].Base.Position", i);
-          m_spotLightsLocation[i].Position = GetUniformLocation(Name);
+    SNPRINTF(Name, sizeof(Name), "gSpotLights[%d].Base.Position", i);
+    m_spotLightsLocation[i].Position = GetUniformLocation(Name);
 
-          SNPRINTF(Name, sizeof(Name), "gSpotLights[%d].Direction", i);
-          m_spotLightsLocation[i].Direction = GetUniformLocation(Name);
+    SNPRINTF(Name, sizeof(Name), "gSpotLights[%d].Direction", i);
+    m_spotLightsLocation[i].Direction = GetUniformLocation(Name);
 
-          SNPRINTF(Name, sizeof(Name), "gSpotLights[%d].Cutoff", i);
-          m_spotLightsLocation[i].Cutoff = GetUniformLocation(Name);
+    SNPRINTF(Name, sizeof(Name), "gSpotLights[%d].Cutoff", i);
+    m_spotLightsLocation[i].Cutoff = GetUniformLocation(Name);
 
-          SNPRINTF(Name, sizeof(Name), "gSpotLights[%d].Base.Base.DiffuseIntensity", i);
-          m_spotLightsLocation[i].DiffuseIntensity = GetUniformLocation(Name);
+    SNPRINTF(Name, sizeof(Name), "gSpotLights[%d].Base.Base.DiffuseIntensity", i);
+    m_spotLightsLocation[i].DiffuseIntensity = GetUniformLocation(Name);
 
-          SNPRINTF(Name, sizeof(Name), "gSpotLights[%d].Base.Atten.Constant", i);
-          m_spotLightsLocation[i].Atten.Constant = GetUniformLocation(Name);
+    SNPRINTF(Name, sizeof(Name), "gSpotLights[%d].Base.Atten.Constant", i);
+    m_spotLightsLocation[i].Atten.Constant = GetUniformLocation(Name);
 
-          SNPRINTF(Name, sizeof(Name), "gSpotLights[%d].Base.Atten.Linear", i);
-          m_spotLightsLocation[i].Atten.Linear = GetUniformLocation(Name);
+    SNPRINTF(Name, sizeof(Name), "gSpotLights[%d].Base.Atten.Linear", i);
+    m_spotLightsLocation[i].Atten.Linear = GetUniformLocation(Name);
 
-          SNPRINTF(Name, sizeof(Name), "gSpotLights[%d].Base.Atten.Exp", i);
-          m_spotLightsLocation[i].Atten.Exp = GetUniformLocation(Name);
+    SNPRINTF(Name, sizeof(Name), "gSpotLights[%d].Base.Atten.Exp", i);
+    m_spotLightsLocation[i].Atten.Exp = GetUniformLocation(Name);
 
-          if (m_spotLightsLocation[i].Color == INVALID_UNIFORM_LOCATION ||
-              m_spotLightsLocation[i].AmbientIntensity == INVALID_UNIFORM_LOCATION ||
-              m_spotLightsLocation[i].Position == INVALID_UNIFORM_LOCATION ||
-              m_spotLightsLocation[i].Direction == INVALID_UNIFORM_LOCATION ||
-              m_spotLightsLocation[i].Cutoff == INVALID_UNIFORM_LOCATION ||
-              m_spotLightsLocation[i].DiffuseIntensity == INVALID_UNIFORM_LOCATION ||
-              m_spotLightsLocation[i].Atten.Constant == INVALID_UNIFORM_LOCATION ||
-              m_spotLightsLocation[i].Atten.Linear == INVALID_UNIFORM_LOCATION ||
-              m_spotLightsLocation[i].Atten.Exp == INVALID_UNIFORM_LOCATION) {
-              return false;
-          }
-      }
+    if (m_spotLightsLocation[i].Color == INVALID_UNIFORM_LOCATION ||
+        m_spotLightsLocation[i].AmbientIntensity == INVALID_UNIFORM_LOCATION ||
+        m_spotLightsLocation[i].Position == INVALID_UNIFORM_LOCATION ||
+        m_spotLightsLocation[i].Direction == INVALID_UNIFORM_LOCATION ||
+        m_spotLightsLocation[i].Cutoff == INVALID_UNIFORM_LOCATION ||
+        m_spotLightsLocation[i].DiffuseIntensity == INVALID_UNIFORM_LOCATION ||
+        m_spotLightsLocation[i].Atten.Constant == INVALID_UNIFORM_LOCATION ||
+        m_spotLightsLocation[i].Atten.Linear == INVALID_UNIFORM_LOCATION ||
+        m_spotLightsLocation[i].Atten.Exp == INVALID_UNIFORM_LOCATION) {
+      return false;
+    }
+  }
 #endif
 
   return true;
@@ -318,21 +318,21 @@ void LightingTechnique::SetPointLights(unsigned int NumLights, const PointLight*
 #if __TUT_VERSION >= 21
 void LightingTechnique::SetSpotLights(unsigned int NumLights, const SpotLight* pLights)
 {
-    glUniform1i(m_numSpotLightsLocation, NumLights);
+  glUniform1i(m_numSpotLightsLocation, NumLights);
 
-    for (unsigned int i = 0 ; i < NumLights ; i++) {
-        glUniform3f(m_spotLightsLocation[i].Color, pLights[i].Color.x, pLights[i].Color.y, pLights[i].Color.z);
-        glUniform1f(m_spotLightsLocation[i].AmbientIntensity, pLights[i].AmbientIntensity);
-        glUniform1f(m_spotLightsLocation[i].DiffuseIntensity, pLights[i].DiffuseIntensity);
-        glUniform3f(m_spotLightsLocation[i].Position,  pLights[i].Position.x, pLights[i].Position.y, pLights[i].Position.z);
-        Vector3f Direction = pLights[i].Direction;
-        Direction.Normalize();
-        glUniform3f(m_spotLightsLocation[i].Direction, Direction.x, Direction.y, Direction.z);
-        glUniform1f(m_spotLightsLocation[i].Cutoff, cosf(ToRadian(pLights[i].Cutoff)));
-        glUniform1f(m_spotLightsLocation[i].Atten.Constant, pLights[i].Attenuation.Constant);
-        glUniform1f(m_spotLightsLocation[i].Atten.Linear,   pLights[i].Attenuation.Linear);
-        glUniform1f(m_spotLightsLocation[i].Atten.Exp,      pLights[i].Attenuation.Exp);
-    }
+  for (unsigned int i = 0 ; i < NumLights ; i++) {
+    glUniform3f(m_spotLightsLocation[i].Color, pLights[i].Color.x, pLights[i].Color.y, pLights[i].Color.z);
+    glUniform1f(m_spotLightsLocation[i].AmbientIntensity, pLights[i].AmbientIntensity);
+    glUniform1f(m_spotLightsLocation[i].DiffuseIntensity, pLights[i].DiffuseIntensity);
+    glUniform3f(m_spotLightsLocation[i].Position,  pLights[i].Position.x, pLights[i].Position.y, pLights[i].Position.z);
+    Vector3f Direction = pLights[i].Direction;
+    Direction.Normalize();
+    glUniform3f(m_spotLightsLocation[i].Direction, Direction.x, Direction.y, Direction.z);
+    glUniform1f(m_spotLightsLocation[i].Cutoff, cosf(ToRadian(pLights[i].Cutoff)));
+    glUniform1f(m_spotLightsLocation[i].Atten.Constant, pLights[i].Attenuation.Constant);
+    glUniform1f(m_spotLightsLocation[i].Atten.Linear,   pLights[i].Attenuation.Linear);
+    glUniform1f(m_spotLightsLocation[i].Atten.Exp,      pLights[i].Attenuation.Exp);
+  }
 }
 #endif
 #endif

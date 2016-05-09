@@ -14,21 +14,22 @@
 #include "ogldev_glut_backend.h"
 
 #if __TUT_VERSION == 17
-#include "Tutorial17/Tutorial17.h"
-#include "ogldev_lights_common.h"
+  #include "Tutorial17/Tutorial17.h"
+  #include "ogldev_lights_common.h"
 #elif __TUT_VERSION == 18
-#include "Tutorial18/Tutorial18.h"
+  #include "Tutorial18/Tutorial18.h"
 #elif __TUT_VERSION == 19
-#include "Tutorial19/Tutorial19.h"
+  #include "Tutorial19/Tutorial19.h"
 #elif __TUT_VERSION == 20
-#include "Tutorial20/Tutorial20.h"
+  #include "Tutorial20/Tutorial20.h"
 #elif __TUT_VERSION == 21
-#include "Tutorial21/Tutorial21.h"
+  #include "Tutorial21/Tutorial21.h"
 #elif __TUT_VERSION == 22
-#include "Tutorial22/Tutorial22.h"
+  #include "Tutorial22/Tutorial22.h"
 #elif __TUT_VERSION == 23
-#include "Tutorial23/Tutorial23.h"
+  #include "Tutorial23/Tutorial23.h"
 #endif
+
 #include <set>
 
 class Tutorials
