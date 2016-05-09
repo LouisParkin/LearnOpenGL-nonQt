@@ -69,6 +69,7 @@ message(Building for Tutorials 4-16 and $$TUT_VERSION)
 # For some reason, qmake refuses to see the .cpp extension if added directly to a file name.
 # Yet, it is fine if it is define as was done below.
 FILE_EXT = ".cpp"
+greaterThan(TUT_VERSION,16) {
 
 # For when menu option 'h' is 17 or greater.
 greaterThan(TUT_VERSION,16) {                                       # Brace Opening #1
