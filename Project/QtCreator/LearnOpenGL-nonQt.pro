@@ -71,46 +71,47 @@ message(Building for Tutorials 4-16 and $$TUT_VERSION)
 FILE_EXT = ".cpp"
 greaterThan(TUT_VERSION,16) {
 
-# For when menu option 'h' is 17 or greater.
-greaterThan(TUT_VERSION,16) {                                       # Brace Opening #1
+  # For when menu option 'h' is 17 or greater.
+  greaterThan(TUT_VERSION,16) {                                       # Brace Opening #1
 
-  # For when menu option 'h' is 21 or below.
-  lessThan(TUT_VERSION,22) {                                        # Brace Opening #2
+    # For when menu option 'h' is 21 or below.
+    lessThan(TUT_VERSION,22) {                                        # Brace Opening #2
 
-    # So for tutorials 17 to 21, a file name lighting_technique.cpp will be compiled and linked.
-    message(adding version $$TUT_VERSION-specific source file: Source/lighting_technique$$FILE_EXT)
-    SOURCES += $$PWD/../../Source/lighting_technique.cpp
-    HEADERS += $$PWD/../../Source/lighting_technique.h
+      # So for tutorials 17 to 21, a file name lighting_technique.cpp will be compiled and linked.
+      message(adding version $$TUT_VERSION-specific source file: Source/lighting_technique$$FILE_EXT)
+      SOURCES += $$PWD/../../Source/lighting_technique.cpp
+      HEADERS += $$PWD/../../Source/lighting_technique.h
 
-  }                                                                 # Brace Closing #2
+    }                                                                 # Brace Closing #2
 
-  # For when menu option 'h' is 22 or greater.
-  greaterThan(TUT_VERSION,21) {                                     # Brace Opening #3
+    # For when menu option 'h' is 22 or greater.
+    greaterThan(TUT_VERSION,21) {                                     # Brace Opening #3
 
-    # So for tutorials 22 and later, a file name mesh.cpp will be compiled and linked.
-    message(adding version $$TUT_VERSION-specific source file: Source/mesh$$FILE_EXT)
-      SOURCES += $$PWD/../../Source/mesh.cpp
+      # So for tutorials 22 and later, a file name mesh.cpp will be compiled and linked.
+      message(adding version $$TUT_VERSION-specific source file: Source/mesh$$FILE_EXT)
+        SOURCES += $$PWD/../../Source/mesh.cpp
 
-    # For when menu option 'h' is 23 or greater.
-    greaterThan(TUT_VERSION,22) {                                   # Brace Opening #4
+      # For when menu option 'h' is 23 or greater.
+      greaterThan(TUT_VERSION,22) {                                   # Brace Opening #4
 
-      # So for tutorials 23 and later, a file name shadow_map_technique.cpp will be compiled and linked.
-      message(adding version $$TUT_VERSION-specific source file: Source/Tutorial$$TUT_VERSION/shadow_map_technique$$FILE_EXT)
+        # So for tutorials 23 and later, a file name shadow_map_technique.cpp will be compiled and linked.
+        message(adding version $$TUT_VERSION-specific source file: Source/Tutorial$$TUT_VERSION/shadow_map_technique$$FILE_EXT)
 
-      # So for tutorials 23 and later, a file name ogldev_shadow_map_fbo.cpp will be compiled and linked.
-      message(adding version $$TUT_VERSION-specific source file: Common/ogldev_shadow_map_fbo$$FILE_EXT)
+        # So for tutorials 23 and later, a file name ogldev_shadow_map_fbo.cpp will be compiled and linked.
+        message(adding version $$TUT_VERSION-specific source file: Common/ogldev_shadow_map_fbo$$FILE_EXT)
 
-      SOURCES += $$PWD/../../Source/Tutorial$$TUT_VERSION/shadow_map_technique.cpp \
-                 $$PWD/../../Common/ogldev_shadow_map_fbo.cpp
+        SOURCES += $$PWD/../../Source/Tutorial$$TUT_VERSION/shadow_map_technique.cpp \
+                   $$PWD/../../Common/ogldev_shadow_map_fbo.cpp
 
-    }                                                               # Brace Closing #4
-  }                                                                 # Brace Closing #3
+      }                                                               # Brace Closing #4
+    }                                                                 # Brace Closing #3
 
-  message(adding version $$TUT_VERSION-specific source file: Tutorial$$TUT_VERSION/Tutorial$$TUT_VERSION$$FILE_EXT)
-      SOURCES += $$PWD/../../Source/Tutorial$$TUT_VERSION/Tutorial$$TUT_VERSION$$FILE_EXT
+    message(adding version $$TUT_VERSION-specific source file: Tutorial$$TUT_VERSION/Tutorial$$TUT_VERSION$$FILE_EXT)
+        SOURCES += $$PWD/../../Source/Tutorial$$TUT_VERSION/Tutorial$$TUT_VERSION$$FILE_EXT
 
-}                                                                   # Brace Closing #1
+  }                                                                   # Brace Closing #1
 
+}
 # The project headers in the Source directory
 HEADERS  += \
            $$PWD/../../Source/Tutorials.h \
